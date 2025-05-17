@@ -1,6 +1,11 @@
 from __future__ import annotations
-import functools, json, pathlib, time, datetime as dt
-from typing import Callable, Any
+
+import datetime as dt
+import functools
+import json
+import pathlib
+import time
+from typing import Any, Callable
 
 # current OpenAI pricing (USD per 1k tokens — adjust as needed)
 PRICE = {
@@ -8,7 +13,8 @@ PRICE = {
     "gpt-4o": {"prompt": 0.01, "completion": 0.03},
 }
 
-LOG_DIR = pathlib.Path("logs"); LOG_DIR.mkdir(exist_ok=True)
+LOG_DIR = pathlib.Path("logs")
+LOG_DIR.mkdir(exist_ok=True)
 
 
 def instrument(model_name: str) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
@@ -24,8 +30,10 @@ def instrument(model_name: str) -> Callable[[Callable[..., Any]], Callable[..., 
 
             usage = getattr(resp, "usage", None)  # OpenAI objects expose usage
             prompt_t = usage.prompt_tokens if usage else 0
-            comp_t   = usage.completion_tokens if usage else 0
-            cost = round((prompt_t * price["prompt"] + comp_t * price["completion"]) / 1000, 6)
+            comp_t = usage.completion_tokens if usage else 0
+            cost = round(
+                (prompt_t * price["prompt"] + comp_t * price["completion"]) / 1000, 6
+            )
 
             log_obj = {
                 "ts": dt.datetime.utcnow().isoformat() + "Z",
@@ -42,5 +50,7 @@ def instrument(model_name: str) -> Callable[[Callable[..., Any]], Callable[..., 
             # attach metrics dict so caller can forward to headers
             resp._metrics = log_obj  # type: ignore[attr-defined]
             return resp
+
         return wrapper
+
     return decorator

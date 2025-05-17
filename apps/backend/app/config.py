@@ -1,5 +1,7 @@
 from functools import lru_cache
+
 from pydantic_settings import BaseSettings
+
 
 class Settings(BaseSettings):
     env: str = "local"
@@ -14,9 +16,10 @@ class Settings(BaseSettings):
         "env_mapping": {
             "supabase_url": "SUPABASE_URL",
             "supabase_key": "SUPABASE_ANON_KEY",
-            "openai_api_key": "OPENAI_API_KEY"
-        }
+            "openai_api_key": "OPENAI_API_KEY",
+        },
     }
+
 
 @lru_cache
 def get_settings() -> Settings:  # dependency‑friendly

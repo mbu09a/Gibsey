@@ -3,13 +3,14 @@
 usage: embed_seed.py [--dry] [--batch 10]
 """
 import argparse
+import json
+import math
 import os
 import sys
 import time
-import math
-import json
+
 from dotenv import load_dotenv
-from openai import OpenAI, APIError
+from openai import APIError, OpenAI
 from supabase import create_client
 
 MODEL = "text-embedding-3-small"
@@ -26,11 +27,20 @@ sb = create_client(SB_URL, SB_KEY)
 client = OpenAI(api_key=OPENAI_KEY)
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--dry", action="store_true", help="don't call OpenAI, just estimate cost")
+parser.add_argument(
+    "--dry", action="store_true", help="don't call OpenAI, just estimate cost"
+)
 parser.add_argument("--batch", type=int, default=10)
 args = parser.parse_args()
 
-rows = sb.table("pages").select("id, content").is_("embedding", "null").limit(1000).execute().data
+rows = (
+    sb.table("pages")
+    .select("id, content")
+    .is_("embedding", "null")
+    .limit(1000)
+    .execute()
+    .data
+)
 print(f"🔎 {len(rows)} rows need embeddings")
 
 total_tokens = 0
@@ -47,13 +57,15 @@ for i in range(0, len(rows), args.batch):
         try:
             resp = client.embeddings.create(model=MODEL, input=texts)
             break
-        except APIError as e:
+        except APIError:
             print(f"OpenAI error → retry in {backoff}s")
             time.sleep(backoff)
             backoff = min(backoff * 2, 60)
     total_tokens += resp.usage.total_tokens
     for r, emb in zip(chunk, resp.data):
-        sb.table("pages").update({"embedding": emb.embedding}).eq("id", r["id"]).execute()
+        sb.table("pages").update({"embedding": emb.embedding}).eq(
+            "id", r["id"]
+        ).execute()
         print(f"· id {r['id']} embedded (dims={len(emb.embedding)})")
 
 usd = (total_tokens / 1000) * PRICE_PER_1K

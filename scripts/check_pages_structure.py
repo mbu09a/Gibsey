@@ -2,6 +2,7 @@
 """Check the structure of the pages table in Supabase.
 """
 import os
+
 from dotenv import load_dotenv
 from supabase import create_client
 
@@ -19,12 +20,12 @@ sb = create_client(SB_URL, SB_KEY)
 try:
     # Get sample row with all fields
     sample_row = sb.table("pages").select("*").limit(1).execute()
-    
+
     if sample_row.data:
         print("Pages table structure:")
         for key in sample_row.data[0].keys():
             print(f"- {key}")
-        
+
         # Show sample row content
         print("\nSample row:")
         for key, value in sample_row.data[0].items():
@@ -37,7 +38,7 @@ try:
                 print(f"{key}: {value}")
     else:
         print("No rows found in the pages table.")
-    
+
 except Exception as e:
     print(f"Error: {e}")
     print("The 'pages' table may not exist or there might be connection issues.")

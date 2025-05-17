@@ -1,7 +1,16 @@
+import os
+
+
 def svg_line(x1, y1, x2, y2):
     return f'    <line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="#000" stroke-width="60" stroke-linecap="square"/>'
 
-def corpus_gate_svg(closed=True, gate_roots=[False, False, False, False], rotate180=False, filename="corpus_gate.svg"):
+
+def corpus_gate_svg(
+    closed=True,
+    gate_roots=[False, False, False, False],
+    rotate180=False,
+    filename="corpus_gate.svg",
+):
     # gate_roots: [gate, root1, root2, root3] -- each is True/False
     svg = []
     svg.append('<svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">')
@@ -37,26 +46,26 @@ def corpus_gate_svg(closed=True, gate_roots=[False, False, False, False], rotate
                 svg.append(svg_line(800, y, 1000, y))
 
     if rotate180:
-        svg.append('  </g>')
-    svg.append('</svg>')
+        svg.append("  </g>")
+    svg.append("</svg>")
     return "\n".join(svg)
+
 
 # --- Generate all 16 Corpus Gates (8 closed, 8 open) ---
 
 # Each entry is a list of True/False indicating which roots are present (from gate up to root3)
 # Example: [True, False, False, False] is gate only; [True, True, False, False] is gate + root1, etc.
 all_gates = [
-    [True, False, False, False],      # Gate 1 / 9 (only gate)
-    [True, True, False, False],       # Gate 2 / 10 (gate + root1)
-    [True, False, True, False],       # Gate 3 / 11 (gate + root2)
-    [True, False, False, True],       # Gate 4 / 12 (gate + root3)
-    [True, True, True, False],        # Gate 5 / 13 (gate + root1 + root2)
-    [True, True, False, True],        # Gate 6 / 14 (gate + root1 + root3)
-    [True, False, True, True],        # Gate 7 / 15 (gate + root2 + root3)
-    [True, True, True, True],         # Gate 8 / 16 (gate + root1 + root2 + root3)
+    [True, False, False, False],  # Gate 1 / 9 (only gate)
+    [True, True, False, False],  # Gate 2 / 10 (gate + root1)
+    [True, False, True, False],  # Gate 3 / 11 (gate + root2)
+    [True, False, False, True],  # Gate 4 / 12 (gate + root3)
+    [True, True, True, False],  # Gate 5 / 13 (gate + root1 + root2)
+    [True, True, False, True],  # Gate 6 / 14 (gate + root1 + root3)
+    [True, False, True, True],  # Gate 7 / 15 (gate + root2 + root3)
+    [True, True, True, True],  # Gate 8 / 16 (gate + root1 + root2 + root3)
 ]
 
-import os
 # Create glyphs directory if it doesn't exist
 os.makedirs("glyphs", exist_ok=True)
 

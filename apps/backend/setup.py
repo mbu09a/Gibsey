@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="gibsey-backend",
@@ -10,6 +10,6 @@ setup(
         "python-dotenv>=0.19.0",
         "supabase>=1.0.0",
         "openai>=1.0.0",
-        "requests>=2.26.0"
+        "requests>=2.26.0",
     ],
 )
