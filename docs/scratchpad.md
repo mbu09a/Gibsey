@@ -18,7 +18,7 @@ All reviewed pages accurately reflect the text in `the-entrance-way.txt` and pag
 
 ## 2025-05-19: Page data enrichment
 
-Regenerated `the-entrance-way-pages.json` using `chunk_entrance_way.py`. The script detected 710 pages and wrote them back to disk. Section headings are pulled from any first bolded line (`**like this**`) on a page. The `entrance-way-section-map.json` file provides the official section and chapter ranges.
+Regenerated `the-entrance-way-pages.json` using `chunk_entrance_way.py` (`python chunk_entrance_way.py --output the-entrance-way-pages.json`). The script detected 710 pages and wrote them back to disk. Section headings are pulled from any first bolded line (`**like this**`) on a page. The `entrance-way-section-map.json` file provides the official section and chapter ranges.
 
 Sample assignments:
 - **Page 1** – Section 1 "an author’s preface" (no chapter)
