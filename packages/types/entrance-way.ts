@@ -7,6 +7,7 @@ export interface Page {
   id: number;
   section: number;
   sectionName: string;
+  symbol: string;
   pageNumber: number;
   globalIndex: number;
   text: string;
@@ -24,6 +25,12 @@ export interface GetPagesBySectionParams {
 export interface SearchPagesParams {
   query: string;
 }
+
+export interface GetPagesBySymbolParams {
+  symbol: string;
+}
+
+export type GetPagesBySymbolResult = Page[];
 
 export type GetPageByIdResult = Page | null;
 export type GetPagesBySectionResult = Page[];

@@ -62,6 +62,16 @@ describe('searchPages', () => {
   });
 });
 
+describe('getPagesBySymbol', () => {
+  it('returns pages list', async () => {
+    const pages = [{ id: 4 }];
+    mockDb.where.mockResolvedValue(pages);
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    const result = await caller.getPagesBySymbol({ symbol: 'glyph_marrow' });
+    expect(result).toEqual(pages);
+  });
+});
+
 describe('getSections', () => {
   it('returns sections list', async () => {
     const sections = [{ id: 1, sectionName: 'Intro' }];

@@ -39,6 +39,7 @@ async function seed() {
       id: page.global_index,
       section: sectionRecord.section,
       sectionName: currentSection,
+      symbol: currentSection.replace(/\s+/g, '_'),
       pageNumber: page.page_number,
       globalIndex: page.global_index,
       text: page.text,
