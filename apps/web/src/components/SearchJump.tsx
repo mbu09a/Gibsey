@@ -16,16 +16,16 @@ const SearchJump: React.FC<SearchJumpProps> = ({ onSelect }) => {
   const handleJump = () => onSelect(jumpSection, jumpPage);
 
   return (
-    <div className="bg-black text-green-500 p-4 border border-green-500">
+    <div className="bg-black text-terminal-green p-4 border border-terminal-green">
       <div className="mb-2 flex gap-2">
         <input
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          className="bg-black border border-green-500 text-green-500 px-2 py-1 flex-grow"
+          className="bg-black border border-terminal-green text-terminal-green px-2 py-1 flex-grow"
           placeholder="Search"
         />
-        <button onClick={handleSearch} className="border border-green-500 px-2 py-1">Search</button>
+        <button onClick={handleSearch} className="border border-terminal-green px-2 py-1">Search</button>
       </div>
       {search.data && (
         <ul className="mb-2 max-h-40 overflow-y-auto">
@@ -46,15 +46,15 @@ const SearchJump: React.FC<SearchJumpProps> = ({ onSelect }) => {
           type="number"
           value={jumpSection}
           onChange={e => setJumpSection(Number(e.target.value))}
-          className="bg-black border border-green-500 text-green-500 px-2 py-1 w-20"
+          className="bg-black border border-terminal-green text-terminal-green px-2 py-1 w-20"
         />
         <input
           type="number"
           value={jumpPage}
           onChange={e => setJumpPage(Number(e.target.value))}
-          className="bg-black border border-green-500 text-green-500 px-2 py-1 w-20"
+          className="bg-black border border-terminal-green text-terminal-green px-2 py-1 w-20"
         />
-        <button onClick={handleJump} className="border border-green-500 px-2 py-1">Go</button>
+        <button onClick={handleJump} className="border border-terminal-green px-2 py-1">Go</button>
       </div>
     </div>
   );
