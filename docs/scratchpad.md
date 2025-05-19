@@ -43,3 +43,10 @@ Issue: the heading on page 9 is parsed as "London Fox Who Dreams of Synchronisti
   - Minor typographic variations on pages 1, 236 and 355.
 
 
+
+## 2025-05-20 – Web UI smoke test
+
+- Verified new React components load in local dev server.
+- Cross-browser check in Chrome 116 and Firefox 118 shows consistent rendering of navigation and search results.
+- Edge case: symbol data currently derived from SVG filenames only; may need metadata for titles or descriptions.
+- Open question: should search auto-focus results on page navigation?
