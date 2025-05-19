@@ -27,4 +27,3 @@ export const pageRelations = relations(pages, ({ one }) => ({
     references: [sections.id],
   }),
 }));
-
