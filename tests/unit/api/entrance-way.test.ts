@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import * as bunTest from 'bun:test';
-import * as fs from 'fs';
 
 // Bun's vi helper lacks `mock`, so map it when missing
 if (!('mock' in vi)) {
@@ -15,6 +14,9 @@ vi.mock('bun:sqlite', () => ({ Database: class {} }));
 vi.mock('@trpc/server', () => ({ initTRPC: () => ({ context: () => ({ create: () => ({ router: (obj: any) => obj }) }) }) }));
 vi.mock('drizzle-orm', () => ({ eq: () => ({}), and: () => ({}), like: () => ({}) }));
 vi.mock('../../../apps/api/auth/middleware', () => ({ authMiddleware: () => {} }));
+vi.mock('../../../the-corpus/symbols/metadata', () => ({
+  symbolMetadata: [{ character: 'Test', filename: 'a.svg', color: '#fff', orientation: 'upright' }],
+}));
 
 import * as router from '../../../apps/api/src/router';
 
@@ -135,10 +137,11 @@ describe('getSections', () => {
 });
 
 describe('getSymbols', () => {
-  it('returns svg file names', async () => {
-    vi.spyOn(fs, 'readdirSync').mockReturnValue(['a.svg', 'b.png'] as any);
+  it('returns metadata list', async () => {
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.getSymbols();
-    expect(result).toEqual(['a.svg']);
+    expect(result).toEqual([
+      { character: 'Test', filename: 'a.svg', color: '#fff', orientation: 'upright' },
+    ]);
   });
 });

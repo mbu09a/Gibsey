@@ -36,3 +36,5 @@ export type GetPagesBySymbolResult = Page[];
 export type GetPageByIdResult = Page | null;
 export type GetPagesBySectionResult = Page[];
 export type SearchPagesResult = Page[];
+
+export * from './symbols';
