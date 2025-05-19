@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "scripts": {
     "seed": "bun run packages/db/seed/index.ts",
-    "test": "bun test"
+    "test": "bun test",
+    "playwright:test": "bun x playwright test",
+    "pytest": "pytest",
+    "test:all": "bun run test && bun run pytest && bun run playwright:test"
   }
 }
 
