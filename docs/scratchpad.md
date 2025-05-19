@@ -53,6 +53,24 @@ Issue: the heading on page 9 is parsed as "London Fox Who Dreams of Synchronisti
 
 - Attempted to open the built site in Chrome and Firefox to verify navigation and styling.
 - The container environment lacks GUI browsers, so cross-browser behavior could not be confirmed.
+
+## 2025-05-20 – Regenerating `the-entrance-way-pages.json`
+
+Steps to rebuild the pages file from the canonical text:
+
+1. Ensure **Python 3.11+** is available (the repo ships with a `.venv` under `services/ai/`). Activate it or use your system interpreter.
+2. Navigate to `packages/db/seed/`.
+3. Run the CLI-enhanced script:
+
+   ```bash
+   python chunk_entrance_way.py --source the-entrance-way.txt --output the-entrance-way-pages.json --section-map entrance-way-section-map.json
+   ```
+
+   The command prints how many pages were written and supports `--source`, `--output`, and `--section-map` options.
+4. Verify the new JSON aligns with `entrance-way-section-map.json`.
+
+The heading on **page 9** is parsed as "London Fox Who Dreams of Synchronistic Extraction" while the mapping file lists "London Fox Who Vertically Disintegrates". Keep the mapping value as canonical.
+
 ## 2025-05-21 – UI edge cases & cross-browser summary
 
 - **Libraries:** React 18, TanStack Router/Query, tRPC, Tailwind CSS, and Vite.
@@ -60,4 +78,3 @@ Issue: the heading on page 9 is parsed as "London Fox Who Dreams of Synchronisti
 - **Edge cases:** symbol images are derived from SVG filenames; missing metadata means alt text falls back to the section name. Prev/next navigation disables correctly but should be re-tested with dynamic sections.
 - **Cross-browser summary:** navigation and search render consistently in Chrome 116 and Firefox 118. Safari and mobile browsers have not yet been tested.
 - **TODOs:** add Safari/mobile checks, improve symbol metadata for accessibility, and revisit search focus behavior after navigation.
-
