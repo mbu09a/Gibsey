@@ -16,6 +16,16 @@ export const db = drizzle(new Database('db.sqlite'));
 export type AppContext = Context & { user: unknown };
 const t = initTRPC.context<AppContext>().create();
 
+const pageSelect = {
+  id: pages.id,
+  section: pages.section,
+  sectionName: pages.sectionName,
+  symbol: pages.symbol,
+  pageNumber: pages.pageNumber,
+  globalIndex: pages.globalIndex,
+  text: pages.text,
+};
+
 export const appRouter = t.router({
   getPageById: t.procedure
     .input(
@@ -23,7 +33,7 @@ export const appRouter = t.router({
     )
     .query(async ({ input }) => {
       const result = await db
-        .select()
+        .select(pageSelect)
         .from(pages)
         .where(and(eq(pages.section, input.section), eq(pages.pageNumber, input.index)));
       return result[0] ?? null;
@@ -33,7 +43,7 @@ export const appRouter = t.router({
     .input(z.object({ section: z.number() }))
     .query(async ({ input }) => {
       return await db
-        .select()
+        .select(pageSelect)
         .from(pages)
         .where(eq(pages.section, input.section));
     }),
@@ -51,9 +61,18 @@ export const appRouter = t.router({
     .input(z.object({ query: z.string() }))
     .query(async ({ input }) => {
       return await db
-        .select()
+        .select(pageSelect)
         .from(pages)
         .where(like(pages.text, `%${input.query}%`));
+    }),
+
+  getPagesBySymbol: t.procedure
+    .input(z.object({ symbol: z.string() }))
+    .query(async ({ input }) => {
+      return await db
+        .select(pageSelect)
+        .from(pages)
+        .where(eq(pages.symbol, input.symbol));
     }),
 
   getSections: t.procedure.query(async () => {

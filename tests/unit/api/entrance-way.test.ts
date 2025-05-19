@@ -67,7 +67,7 @@ describe('getPagesBySymbol', () => {
     const pages = [{ id: 4 }];
     mockDb.where.mockResolvedValue(pages);
     const caller = router.appRouter.createCaller({ user: null } as any);
-    const result = await caller.getPagesBySymbol({ symbol: 'london_fox' });
+    const result = await caller.getPagesBySymbol({ symbol: 'glyph_marrow' });
     expect(result).toEqual(pages);
   });
 });
@@ -91,4 +91,3 @@ describe('getSymbols', () => {
     expect(result).toEqual(['a.svg']);
   });
 });
-
