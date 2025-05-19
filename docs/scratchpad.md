@@ -86,3 +86,28 @@ The heading on **page 9** is parsed as "London Fox Who Dreams of Synchronistic E
 - **pytest:** could not run because the local Python environment lacks the `pytest` module.
 
 Follow-up: install missing dependencies and rerun all suites to confirm baseline behavior.
+
+## 2025-05-23 – Symbol mapping helper
+
+The database seed (`packages/db/seed/index.ts`) includes a helper that slugifies
+the `connected_character` names from `entrance-way-section-map.json` and maps
+them to the symbol SVGs. An optional `symbolMap` object overrides any slugs that
+do not match a file name exactly. The definitive list of symbols lives in
+[/the-corpus/README.md](../the-corpus/README.md).
+
+### Regeneration steps
+
+1. Verify `entrance-way-section-map.json` reflects any new sections.
+2. Run `python chunk_entrance_way.py --source the-entrance-way.txt --output
+   the-entrance-way-pages.json --section-map entrance-way-section-map.json` to
+   rebuild the pages file.
+3. Execute `bun run ts-node packages/db/seed/index.ts` to repopulate the
+   database and refresh symbol mappings.
+
+### Unmapped names
+
+Running the helper flagged one unmapped name:
+
+- **Cop-E-Right** → slugged to `cop_e_right` but the symbol file is
+  `cop-e-right.svg`. Add an entry to `symbolMap` if the hyphenated file name
+  should be retained.
