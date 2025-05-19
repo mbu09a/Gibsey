@@ -3,7 +3,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'terminal-green': '#00FF7F',
+        'terminal-green': '#00FF00',
       },
     },
   },

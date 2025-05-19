@@ -18,7 +18,7 @@ All reviewed pages accurately reflect the text in `the-entrance-way.txt` and pag
 
 ## 2025-05-19: Page data enrichment
 
-Regenerated `the-entrance-way-pages.json` using `chunk_entrance_way.py`. The script detected 710 pages and wrote them back to disk. Section headings are pulled from any first bolded line (`**like this**`) on a page. The `entrance-way-section-map.json` file provides the official section and chapter ranges.
+Regenerated `the-entrance-way-pages.json` using `chunk_entrance_way.py` (`python chunk_entrance_way.py --output the-entrance-way-pages.json`). The script detected 710 pages and wrote them back to disk. Section headings are pulled from any first bolded line (`**like this**`) on a page. The `entrance-way-section-map.json` file provides the official section and chapter ranges.
 
 Sample assignments:
 - **Page 1** – Section 1 "an author’s preface" (no chapter)
@@ -70,3 +70,11 @@ Steps to rebuild the pages file from the canonical text:
 4. Verify the new JSON aligns with `entrance-way-section-map.json`.
 
 The heading on **page 9** is parsed as "London Fox Who Dreams of Synchronistic Extraction" while the mapping file lists "London Fox Who Vertically Disintegrates". Keep the mapping value as canonical.
+
+## 2025-05-21 – UI edge cases & cross-browser summary
+
+- **Libraries:** React 18, TanStack Router/Query, tRPC, Tailwind CSS, and Vite.
+- **Styling quirks:** dark theme uses a black background with the custom `terminal-green` accent. Disabled buttons rely on `opacity-50` which may look muted in high-contrast mode.
+- **Edge cases:** symbol images are derived from SVG filenames; missing metadata means alt text falls back to the section name. Prev/next navigation disables correctly but should be re-tested with dynamic sections.
+- **Cross-browser summary:** navigation and search render consistently in Chrome 116 and Firefox 118. Safari and mobile browsers have not yet been tested.
+- **TODOs:** add Safari/mobile checks, improve symbol metadata for accessibility, and revisit search focus behavior after navigation.

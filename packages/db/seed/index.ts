@@ -6,6 +6,10 @@ import { readFile } from 'fs/promises';
 const db = drizzle(new Database('db.sqlite'));
 
 async function seed() {
+  // Clear existing data to keep the seed idempotent
+  await db.delete(pages);
+  await db.delete(sections);
+
   const sectionMap: Array<{ section: number; section_name: string }> = JSON.parse(
     await readFile(new URL('./entrance-way-section-map.json', import.meta.url), 'utf8'),
   );

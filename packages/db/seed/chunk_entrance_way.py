@@ -1,14 +1,33 @@
+import argparse
 import json
 import re
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
-source_file = BASE_DIR / 'the-entrance-way.txt'
-output_file = BASE_DIR / 'the-entrance-way-pages.json'
 section_map_file = BASE_DIR / 'entrance-way-section-map.json'
 
-text = source_file.read_text(encoding='utf-8')
-section_map = json.loads(section_map_file.read_text(encoding='utf-8'))
+parser = argparse.ArgumentParser(
+    description="Chunk The Entrance Way text into JSON page objects."
+)
+parser.add_argument(
+    "--input",
+    type=Path,
+    default=BASE_DIR / "the-entrance-way.txt",
+    help="Path to the source text file",
+)
+parser.add_argument(
+    "--output",
+    type=Path,
+    default=BASE_DIR / "the-entrance-way-pages.json",
+    help="Path where the pages JSON should be written",
+)
+args = parser.parse_args()
+
+source_file: Path = args.input
+output_file: Path = args.output
+
+text = source_file.read_text(encoding="utf-8")
+section_map = json.loads(section_map_file.read_text(encoding="utf-8"))
 
 pattern = re.compile(r'###Page (\d+)###')
 

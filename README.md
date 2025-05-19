@@ -154,9 +154,11 @@ newer), and **Python 3** installed.
 
 ## Development Assets
 
-- **Entrance Way Source Text:**  
-  The full, canonical text for The Entrance Way is located at:  
+- **Entrance Way Source Text:**
+  The full, canonical text for The Entrance Way is located at:
   `/packages/db/seed/the-entrance-way.txt`
+  To regenerate the chunked pages file run:
+  `python packages/db/seed/chunk_entrance_way.py --output the-entrance-way-pages.json`
 
 - **Corpus Symbols:**  
   The 16 baseline Corpus symbol SVG files are located at:  
