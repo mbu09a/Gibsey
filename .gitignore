@@ -1,5 +1,11 @@
 # Node/Bun/TypeScript (web, api, packages)
 node_modules/
+!node_modules/@hono/**
+!node_modules/@trpc/**
+!node_modules/drizzle-orm/**
+!node_modules/hono/**
+!node_modules/zod/**
+!node_modules/vitest/**
 bun.lockb
 *.log
 dist/
