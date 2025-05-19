@@ -29,6 +29,14 @@ output_file: Path = args.output
 text = source_file.read_text(encoding="utf-8")
 section_map = json.loads(section_map_file.read_text(encoding="utf-8"))
 
+
+# Slug helper replicating the TypeScript seeder logic
+def slug(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", name.lower()).strip("_")
+
+# Optional override mapping if certain names need special symbols
+symbol_map: dict[str, str] = {}
+
 pattern = re.compile(r'###Page (\d+)###')
 
 matches = list(pattern.finditer(text))
@@ -36,13 +44,14 @@ matches = list(pattern.finditer(text))
 pages = []
 
 def find_section_data(page_num: int) -> dict:
-    """Return section/chapter info for a given page number."""
+    """Return section/chapter info and corpus symbol for a given page number."""
     for sec in section_map:
         if sec['start_page'] <= page_num <= sec['end_page']:
             data = {
                 'section': sec['section'],
                 'section_name': sec['section_name'],
                 'connected_character': sec['connected_character'],
+                'corpus_symbol': symbol_map.get(sec['connected_character'], slug(sec['connected_character'])),
             }
             for chap in sec.get('chapters', []):
                 if chap['start_page'] <= page_num <= chap['end_page']:
@@ -65,6 +74,7 @@ for i, match in enumerate(matches):
         'section': meta.get('section'),
         'section_name': meta.get('section_name'),
         'connected_character': meta.get('connected_character'),
+        'corpus_symbol': meta.get('corpus_symbol'),
         'text': content,
     }
     if 'chapter' in meta:
