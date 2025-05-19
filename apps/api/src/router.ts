@@ -10,6 +10,7 @@ import { join } from 'path';
 import { eq, and, like } from 'drizzle-orm';
 import { z } from 'zod';
 import { authMiddleware } from '../auth/middleware';
+import colorMap from '../../../the-corpus/colors';
 
 export const db = drizzle(new Database('db.sqlite'));
 
@@ -74,6 +75,10 @@ export const appRouter = t.router({
     const dir = join(__dirname, '../../the-corpus/symbols');
     const files = readdirSync(dir);
     return files.filter((f) => f.endsWith('.svg'));
+  }),
+
+  getCorpusMetadata: t.procedure.query(async () => {
+    return { colors: colorMap };
   }),
 });
 
