@@ -1,36 +1,63 @@
 import React, { useState } from 'react';
-import { trpc } from '../trpc';
+import { trpc } from '../utils/trpc';
 
-export const SearchJump: React.FC = () => {
+export interface SearchJumpProps {
+  onSelect: (section: number, index: number) => void;
+}
+
+const SearchJump: React.FC<SearchJumpProps> = ({ onSelect }) => {
   const [query, setQuery] = useState('');
-  const search = trpc.searchPages.useQuery(
-    { query },
-    { enabled: false }
-  );
+  const [jumpSection, setJumpSection] = useState(1);
+  const [jumpPage, setJumpPage] = useState(1);
 
-  const onSearch = () => search.refetch();
+  const search = trpc.searchPages.useQuery({ query }, { enabled: false });
+
+  const handleSearch = () => search.refetch();
+  const handleJump = () => onSelect(jumpSection, jumpPage);
 
   return (
-    <div className="p-4">
-      <input
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="bg-black text-terminal-green border border-terminal-green p-2"
-        placeholder="Search or jump..."
-      />
-      <button
-        onClick={onSearch}
-        className="ml-2 px-2 py-1 bg-terminal-green text-black"
-      >
-        Go
-      </button>
-      <ul>
-        {search.data?.map((page) => (
-          <li key={page.id}>
-            {page.sectionName} {page.pageNumber}
-          </li>
-        ))}
-      </ul>
+    <div className="bg-black text-green-500 p-4 border border-green-500">
+      <div className="mb-2 flex gap-2">
+        <input
+          type="text"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          className="bg-black border border-green-500 text-green-500 px-2 py-1 flex-grow"
+          placeholder="Search"
+        />
+        <button onClick={handleSearch} className="border border-green-500 px-2 py-1">Search</button>
+      </div>
+      {search.data && (
+        <ul className="mb-2 max-h-40 overflow-y-auto">
+          {search.data.map(page => (
+            <li key={page.id}>
+              <button
+                className="underline"
+                onClick={() => onSelect(page.section, page.pageNumber)}
+              >
+                Section {page.section} - Page {page.pageNumber}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="flex gap-2 items-center">
+        <input
+          type="number"
+          value={jumpSection}
+          onChange={e => setJumpSection(Number(e.target.value))}
+          className="bg-black border border-green-500 text-green-500 px-2 py-1 w-20"
+        />
+        <input
+          type="number"
+          value={jumpPage}
+          onChange={e => setJumpPage(Number(e.target.value))}
+          className="bg-black border border-green-500 text-green-500 px-2 py-1 w-20"
+        />
+        <button onClick={handleJump} className="border border-green-500 px-2 py-1">Go</button>
+      </div>
     </div>
   );
 };
+
+export default SearchJump;

@@ -138,6 +138,20 @@ Code Xanadu is the open-source toolkit that lets anyone clone, remix, and launch
 
 ---
 
+## Development Scripts
+
+These helper scripts live in the `scripts/` directory and are intended to be run
+inside the containerized dev environment via `make dev`.
+
+- **setup_dev.sh** – Bootstraps the project, installs dependencies, and prepares
+  the local database.
+- **reset_db.sh** – Drops and re-seeds the development database.
+
+Before running the scripts ensure you have **Docker**, **Node.js** (v18 or
+newer), and **Python 3** installed.
+
+---
+
 ## Development Assets
 
 - **Entrance Way Source Text:**  
