@@ -28,3 +28,18 @@ Sample assignments:
 - **Page 612** – Section 14 "An Unexpected Disappearance: A Glyph Marrow Mystery", Chapter 10 "The Geyser"
 
 Issue: the heading on page 9 is parsed as "London Fox Who Dreams of Synchronistic Extraction" but the section map names this portion "London Fox Who Vertically Disintegrates". The map values are kept as canonical. No other special handling was required.
+
+## 2025-05-19 – Regenerated `the-entrance-way-pages.json`
+
+- Re-ran `chunk_entrance_way.py` to rebuild the pages file from the canonical text.
+- Cross-checked output with `entrance-way-section-map.json`.
+  - **Page 1** → Section 1: an author’s preface
+  - **Page 25** → Section 3: An Unexpected Disappearance – Chapter 1 *The Queue and Station*
+  - **Page 204** → Section 4: An Expected Appearance – Chapter 1 *The Tunneled Vision*
+  - **Page 565** → Section 14: An Unexpected Disappearance – Chapter 7 *The Rainbows*
+  - **Page 678** → Section 16: The Author's Preface
+- Noted mismatched headings:
+  - Page 9 heading differs from mapped section name.
+  - Minor typographic variations on pages 1, 236 and 355.
+
+

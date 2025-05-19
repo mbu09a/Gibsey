@@ -87,9 +87,27 @@ This document is for human and AI agents. If you’re here to build, fix, or ima
 - **Entrance Way Source File:**  
   Please use `/packages/db/seed/the-entrance-way.txt` as the canonical source for all page chunking, seeding, and content tasks.
 
-- **Corpus Symbols:**  
-  All baseline symbols for the Corpus are located in `/the-corpus/symbols/`.  
+- **Corpus Symbols:**
+  All baseline symbols for the Corpus are located in `/the-corpus/symbols/`.
   Each SVG file is named according to its character or archetype. Reference these when building navigation, tagging, or ritual UI elements.
+
+---
+
+## Entrance Way API
+
+tRPC endpoints are served from `/trpc`:
+
+| Procedure | Parameters | Result |
+|-----------|------------|--------|
+| `getPageById` | `{ section: number, index: number }` | `Page \| null` |
+| `getPagesBySection` | `{ section: number }` | `Page[]` |
+| `searchPages` | `{ query: string }` | `Page[]` |
+
+Example using TanStack Query:
+
+```ts
+const page = trpc.getPageById.useQuery({ section: 1, index: 5 });
+```
 
 ---
 
