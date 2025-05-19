@@ -10,25 +10,30 @@ async function seed() {
   await db.delete(pages);
   await db.delete(sections);
 
-  const sectionMap: Array<{
-    section: number;
-    section_name: string;
-    connected_character: string;
-  }> = JSON.parse(
+  const sectionMap: Array<{ section: number; section_name: string; connected_character: string }> = JSON.parse(
     await readFile(new URL('./entrance-way-section-map.json', import.meta.url), 'utf8'),
   );
 
+  // Canonical slug function
   const slug = (name: string) =>
     name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '_')
       .replace(/^_|_$/g, '');
 
+  // Optional: provide a symbolMap for overrides if you ever want to support special cases
+  const symbolMap: Record<string, string> = {
+    // Add only if you need a mapping that slug() can't cover
+    // 'The Author': 'the_author',
+    // ...
+  };
+
   for (const s of sectionMap) {
+    const corpusSymbol = symbolMap[s.connected_character] || slug(s.connected_character);
     await db.insert(sections).values({
       id: s.section,
       sectionName: s.section_name,
-      corpusSymbol: slug(s.connected_character),
+      corpusSymbol,
     });
   }
 
@@ -48,12 +53,13 @@ async function seed() {
       (s) => s.section_name.toLowerCase() === currentSection.toLowerCase(),
     );
     if (!sectionRecord) continue;
+    const corpusSymbol = symbolMap[sectionRecord.connected_character] || slug(sectionRecord.connected_character);
 
     await db.insert(pages).values({
       id: page.global_index,
       section: sectionRecord.section,
       sectionName: currentSection,
-      corpusSymbol: slug(sectionRecord.connected_character),
+      corpusSymbol,
       pageNumber: page.page_number,
       globalIndex: page.global_index,
       text: page.text,
@@ -65,4 +71,3 @@ seed().catch((err) => {
   console.error(err);
   process.exit(1);
 });
-

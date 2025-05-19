@@ -1,5 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import * as bunTest from 'bun:test';
 import * as fs from 'fs';
+
+// Bun's vi helper lacks `mock`, so map it when missing
+if (!('mock' in vi)) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (vi as any).mock = (bunTest as any).mock;
+}
 
 vi.mock('hono', () => ({ Hono: class {} }));
 vi.mock('@hono/trpc-server', () => ({ trpcServer: () => {} }));
@@ -8,7 +15,6 @@ vi.mock('bun:sqlite', () => ({ Database: class {} }));
 vi.mock('@trpc/server', () => ({ initTRPC: () => ({ context: () => ({ create: () => ({ router: (obj: any) => obj }) }) }) }));
 vi.mock('drizzle-orm', () => ({ eq: () => ({}), and: () => ({}), like: () => ({}) }));
 vi.mock('../../../apps/api/auth/middleware', () => ({ authMiddleware: () => {} }));
-vi.mock('zod', () => ({ z: { object: () => ({}), number: () => ({}), string: () => ({}) } }));
 
 import * as router from '../../../apps/api/src/router';
 
@@ -40,6 +46,17 @@ describe('getPageById', () => {
     const result = await caller.getPageById({ section: 1, index: 2 });
     expect(result).toBeNull();
   });
+
+  it('throws error when input is missing', async () => {
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    await expect(caller.getPageById({} as any)).rejects.toThrow();
+  });
+
+  it('throws error on invalid input types', async () => {
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    // section should be number, index should be number
+    await expect(caller.getPageById({ section: 'a', index: 'b' } as any)).rejects.toThrow();
+  });
 });
 
 describe('getPagesBySection', () => {
@@ -50,6 +67,23 @@ describe('getPagesBySection', () => {
     const result = await caller.getPagesBySection({ section: 1 });
     expect(result).toEqual(pages);
   });
+
+  it('returns empty array when no pages found', async () => {
+    mockDb.where.mockResolvedValue([]);
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    const result = await caller.getPagesBySection({ section: 99 });
+    expect(result).toEqual([]);
+  });
+
+  it('throws error when input is missing', async () => {
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    await expect(caller.getPagesBySection({} as any)).rejects.toThrow();
+  });
+
+  it('throws error on invalid input type', async () => {
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    await expect(caller.getPagesBySection({ section: 'x' } as any)).rejects.toThrow();
+  });
 });
 
 describe('searchPages', () => {
@@ -58,6 +92,33 @@ describe('searchPages', () => {
     mockDb.where.mockResolvedValue(pages);
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.searchPages({ query: 'hello' });
+    expect(result).toEqual(pages);
+  });
+
+  it('returns empty array when no pages match', async () => {
+    mockDb.where.mockResolvedValue([]);
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    const result = await caller.searchPages({ query: 'missing' });
+    expect(result).toEqual([]);
+  });
+
+  it('throws error when input is missing', async () => {
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    await expect(caller.searchPages({} as any)).rejects.toThrow();
+  });
+
+  it('throws error on invalid input type', async () => {
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    await expect(caller.searchPages({ query: 123 as any } as any)).rejects.toThrow();
+  });
+});
+
+describe('getPagesBySymbol', () => {
+  it('returns pages for a symbol', async () => {
+    const pages = [{ id: 4 }];
+    mockDb.where.mockResolvedValue(pages);
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    const result = await caller.getPagesBySymbol({ symbol: 'glyph_marrow' });
     expect(result).toEqual(pages);
   });
 });
@@ -81,4 +142,3 @@ describe('getSymbols', () => {
     expect(result).toEqual(['a.svg']);
   });
 });
-
