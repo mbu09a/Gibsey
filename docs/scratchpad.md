@@ -78,3 +78,11 @@ The heading on **page 9** is parsed as "London Fox Who Dreams of Synchronistic E
 - **Edge cases:** symbol images are derived from SVG filenames; missing metadata means alt text falls back to the section name. Prev/next navigation disables correctly but should be re-tested with dynamic sections.
 - **Cross-browser summary:** navigation and search render consistently in Chrome 116 and Firefox 118. Safari and mobile browsers have not yet been tested.
 - **TODOs:** add Safari/mobile checks, improve symbol metadata for accessibility, and revisit search focus behavior after navigation.
+
+## 2025-05-22 – Test suite results
+
+- **Playwright:** `npx playwright test` failed to download the Playwright package (`EHOSTUNREACH`). No E2E tests were executed.
+- **Vitest:** `bun test` attempted to run the API unit tests but failed with `Cannot find package 'hono'` during module resolution.
+- **pytest:** could not run because the local Python environment lacks the `pytest` module.
+
+Follow-up: install missing dependencies and rerun all suites to confirm baseline behavior.
