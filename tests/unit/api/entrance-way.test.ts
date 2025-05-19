@@ -63,7 +63,7 @@ describe('searchPages', () => {
 });
 
 describe('getPagesBySymbol', () => {
-  it('returns pages list', async () => {
+  it('returns pages for a symbol', async () => {
     const pages = [{ id: 4 }];
     mockDb.where.mockResolvedValue(pages);
     const caller = router.appRouter.createCaller({ user: null } as any);
@@ -91,4 +91,3 @@ describe('getSymbols', () => {
     expect(result).toEqual(['a.svg']);
   });
 });
-

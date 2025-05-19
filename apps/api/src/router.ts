@@ -48,6 +48,15 @@ export const appRouter = t.router({
         .where(eq(pages.section, input.section));
     }),
 
+  getPagesBySymbol: t.procedure
+    .input(z.object({ symbol: z.string() }))
+    .query(async ({ input }) => {
+      return await db
+        .select()
+        .from(pages)
+        .where(eq(pages.corpusSymbol, input.symbol));
+    }),
+
   searchPages: t.procedure
     .input(z.object({ query: z.string() }))
     .query(async ({ input }) => {
