@@ -1,13 +1,14 @@
 export interface Section {
   id: number;
   sectionName: string;
+  corpusSymbol: string;
 }
 
 export interface Page {
   id: number;
   section: number;
   sectionName: string;
-  symbol: string;
+  corpusSymbol: string;
   pageNumber: number;
   globalIndex: number;
   text: string;
@@ -35,4 +36,3 @@ export type GetPagesBySymbolResult = Page[];
 export type GetPageByIdResult = Page | null;
 export type GetPagesBySectionResult = Page[];
 export type SearchPagesResult = Page[];
-
