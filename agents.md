@@ -102,12 +102,112 @@ tRPC endpoints are served from `/trpc`:
 | `getPageById` | `{ section: number, index: number }` | `Page \| null` |
 | `getPagesBySection` | `{ section: number }` | `Page[]` |
 | `searchPages` | `{ query: string }` | `Page[]` |
+| `getSections` | none | `Section[]` |
+| `getSymbols` | none | `string[]` |
 
 Example using TanStack Query:
 
 ```ts
 const page = trpc.getPageById.useQuery({ section: 1, index: 5 });
 ```
+
+### Object Structure
+
+`Page` objects contain:
+
+- `id`: numeric primary key
+- `section`: section ID
+- `sectionName`: human readable name
+- `corpusSymbol`: symbol code
+- `pageNumber`: page index within the section
+- `globalIndex`: absolute ordering of pages
+- `text`: page content
+
+`Section` objects contain:
+
+- `id`: numeric primary key
+- `sectionName`: title of the section
+- `corpusSymbol`: associated symbol
+
+### Request/Response Examples
+
+`getPageById`
+
+```http
+POST /trpc/getPageById
+{ "section": 1, "index": 1 }
+```
+
+```json
+{
+  "id": 1,
+  "section": 1,
+  "sectionName": "an author's preface",
+  "corpusSymbol": "A",
+  "pageNumber": 1,
+  "globalIndex": 1,
+  "text": "..."
+}
+```
+
+`getPagesBySection`
+
+```http
+POST /trpc/getPagesBySection
+{ "section": 1 }
+```
+
+```json
+[
+  { "id": 1, "section": 1, "pageNumber": 1, ... }
+]
+```
+
+`searchPages`
+
+```http
+POST /trpc/searchPages
+{ "query": "Scheherazade" }
+```
+
+```json
+[
+  { "id": 3, "section": 1, "pageNumber": 3, ... }
+]
+```
+
+`getSections`
+
+```http
+POST /trpc/getSections
+{}
+```
+
+```json
+[
+  { "id": 1, "sectionName": "an author's preface", "corpusSymbol": "A" }
+]
+```
+
+`getSymbols`
+
+```http
+POST /trpc/getSymbols
+{}
+```
+
+```json
+["A.svg", "B.svg"]
+```
+
+## Running Tests
+
+- **TypeScript unit tests:** `bun test`
+- **Python unit tests:** `pytest`
+- **Playwright E2E tests:** `bunx playwright test` (after installing Playwright)
+
+Sample test data lives at `/packages/db/seed/the-entrance-way-pages.json`. Many
+tests expect this path during setup.
 
 ---
 
