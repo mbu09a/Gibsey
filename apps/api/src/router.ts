@@ -10,6 +10,7 @@ import { join } from 'path';
 import { eq, and, like } from 'drizzle-orm';
 import { z } from 'zod';
 import { authMiddleware } from '../auth/middleware';
+import { sectionColors } from '../../../packages/utils/sectionColors';
 
 export const db = drizzle(new Database('db.sqlite'));
 
@@ -36,38 +37,43 @@ export const appRouter = t.router({
         .select(pageSelect)
         .from(pages)
         .where(and(eq(pages.section, input.section), eq(pages.pageNumber, input.index)));
-      return result[0] ?? null;
+      if (!result[0]) return null;
+      return { ...result[0], color: sectionColors[result[0].section] ?? '#00FF00' };
     }),
 
   getPagesBySection: t.procedure
     .input(z.object({ section: z.number() }))
     .query(async ({ input }) => {
-      return await db
+      const res = await db
         .select(pageSelect)
         .from(pages)
         .where(eq(pages.section, input.section));
+      return res.map(p => ({ ...p, color: sectionColors[p.section] ?? '#00FF00' }));
     }),
 
   searchPages: t.procedure
     .input(z.object({ query: z.string() }))
     .query(async ({ input }) => {
-      return await db
+      const res = await db
         .select(pageSelect)
         .from(pages)
         .where(like(pages.text, `%${input.query}%`));
+      return res.map(p => ({ ...p, color: sectionColors[p.section] ?? '#00FF00' }));
     }),
 
   getPagesBySymbol: t.procedure
     .input(z.object({ symbol: z.string() }))
     .query(async ({ input }) => {
-      return await db
+      const res = await db
         .select(pageSelect)
         .from(pages)
         .where(eq(pages.symbol, input.symbol));
+      return res.map(p => ({ ...p, color: sectionColors[p.section] ?? '#00FF00' }));
     }),
 
   getSections: t.procedure.query(async () => {
-    return await db.select().from(sections);
+    const secs = await db.select().from(sections);
+    return secs.map(s => ({ ...s, color: sectionColors[s.id] ?? '#00FF00' }));
   }),
 
   getSymbols: t.procedure.query(async () => {

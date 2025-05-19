@@ -8,9 +8,10 @@ export interface NavigationProps {
   index: number;
   onNavigate: (section: number, index: number) => void;
   sections?: Section[];
+  color?: string;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate, sections }) => {
+const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate, sections, color = '#00FF00' }) => {
   // Optionally fetch sections from API if not provided
   const { data: sectionList } = trpc.getSections
     ? trpc.getSections.useQuery(undefined, { enabled: !sections })
@@ -36,18 +37,23 @@ const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate, sec
   };
 
   return (
-    <div className="bg-black text-terminal-green p-4 border border-terminal-green flex items-center gap-4">
+    <div
+      className="bg-black text-terminal-green p-4 flex items-center gap-4 border"
+      style={{ borderColor: color }}
+    >
       <button
         onClick={handlePrev}
         disabled={prevDisabled}
-        className="border border-terminal-green px-2 py-1 disabled:opacity-50"
+        className="border px-2 py-1 disabled:opacity-50"
+        style={{ borderColor: color }}
       >
         Prev
       </button>
       <select
         value={section}
         onChange={e => onNavigate(Number(e.target.value), 1)}
-        className="bg-black border border-terminal-green text-terminal-green px-2 py-1"
+        className="bg-black border text-terminal-green px-2 py-1"
+        style={{ borderColor: color }}
       >
         {sectionArray.map(sec =>
           <option key={sec.id} value={sec.id}>
@@ -58,7 +64,8 @@ const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate, sec
       <button
         onClick={handleNext}
         disabled={nextDisabled}
-        className="border border-terminal-green px-2 py-1 disabled:opacity-50"
+        className="border px-2 py-1 disabled:opacity-50"
+        style={{ borderColor: color }}
       >
         Next
       </button>

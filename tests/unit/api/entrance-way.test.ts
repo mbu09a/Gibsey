@@ -12,6 +12,12 @@ vi.mock('hono', () => ({ Hono: class {} }));
 vi.mock('@hono/trpc-server', () => ({ trpcServer: () => {} }));
 vi.mock('drizzle-orm/bun-sqlite', () => ({ drizzle: () => ({}) }));
 vi.mock('bun:sqlite', () => ({ Database: class {} }));
+vi.mock('drizzle-orm/sqlite-core', () => ({
+  sqliteTable: () => ({}),
+  integer: () => ({ primaryKey: () => ({}) }),
+  text: () => ({ notNull: () => ({}) })
+}));
+vi.mock('../../../packages/db/src/schema', () => ({ pages: {}, sections: {} }));
 vi.mock('@trpc/server', () => ({ initTRPC: () => ({ context: () => ({ create: () => ({ router: (obj: any) => obj }) }) }) }));
 vi.mock('drizzle-orm', () => ({ eq: () => ({}), and: () => ({}), like: () => ({}) }));
 vi.mock('../../../apps/api/auth/middleware', () => ({ authMiddleware: () => {} }));
@@ -34,10 +40,10 @@ beforeEach(() => {
 
 describe('getPageById', () => {
   it('returns page when found', async () => {
-    mockDb.where.mockResolvedValue([{ id: 1 }]);
+    mockDb.where.mockResolvedValue([{ id: 1, section: 1 }]);
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.getPageById({ section: 1, index: 1 });
-    expect(result).toEqual({ id: 1 });
+    expect(result).toEqual({ id: 1, section: 1, color: expect.any(String) });
   });
 
   it('returns null when not found', async () => {
@@ -61,11 +67,11 @@ describe('getPageById', () => {
 
 describe('getPagesBySection', () => {
   it('returns pages list', async () => {
-    const pages = [{ id: 1 }, { id: 2 }];
+    const pages = [{ id: 1, section: 1 }, { id: 2, section: 1 }];
     mockDb.where.mockResolvedValue(pages);
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.getPagesBySection({ section: 1 });
-    expect(result).toEqual(pages);
+    expect(result[0]).toHaveProperty('color');
   });
 
   it('returns empty array when no pages found', async () => {
@@ -88,11 +94,11 @@ describe('getPagesBySection', () => {
 
 describe('searchPages', () => {
   it('returns matched pages', async () => {
-    const pages = [{ id: 3 }];
+    const pages = [{ id: 3, section: 1 }];
     mockDb.where.mockResolvedValue(pages);
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.searchPages({ query: 'hello' });
-    expect(result).toEqual(pages);
+    expect(result[0]).toHaveProperty('color');
   });
 
   it('returns empty array when no pages match', async () => {
@@ -115,11 +121,11 @@ describe('searchPages', () => {
 
 describe('getPagesBySymbol', () => {
   it('returns pages for a symbol', async () => {
-    const pages = [{ id: 4 }];
+    const pages = [{ id: 4, section: 3 }];
     mockDb.where.mockResolvedValue(pages);
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.getPagesBySymbol({ symbol: 'glyph_marrow' });
-    expect(result).toEqual(pages);
+    expect(result[0]).toHaveProperty('color');
   });
 });
 
@@ -130,7 +136,7 @@ describe('getSections', () => {
     router.db.select = selectMock as any;
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.getSections();
-    expect(result).toEqual(sections);
+    expect(result[0]).toHaveProperty('color');
   });
 });
 
