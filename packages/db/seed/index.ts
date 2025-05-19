@@ -10,12 +10,26 @@ async function seed() {
   await db.delete(pages);
   await db.delete(sections);
 
-  const sectionMap: Array<{ section: number; section_name: string }> = JSON.parse(
+  const sectionMap: Array<{
+    section: number;
+    section_name: string;
+    connected_character: string;
+  }> = JSON.parse(
     await readFile(new URL('./entrance-way-section-map.json', import.meta.url), 'utf8'),
   );
 
+  const slug = (name: string) =>
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_|_$/g, '');
+
   for (const s of sectionMap) {
-    await db.insert(sections).values({ id: s.section, sectionName: s.section_name });
+    await db.insert(sections).values({
+      id: s.section,
+      sectionName: s.section_name,
+      corpusSymbol: slug(s.connected_character),
+    });
   }
 
   const pagesData: Array<{
@@ -39,6 +53,7 @@ async function seed() {
       id: page.global_index,
       section: sectionRecord.section,
       sectionName: currentSection,
+      corpusSymbol: slug(sectionRecord.connected_character),
       pageNumber: page.page_number,
       globalIndex: page.global_index,
       text: page.text,

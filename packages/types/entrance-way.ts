@@ -1,12 +1,14 @@
 export interface Section {
   id: number;
   sectionName: string;
+  corpusSymbol: string;
 }
 
 export interface Page {
   id: number;
   section: number;
   sectionName: string;
+  corpusSymbol: string;
   pageNumber: number;
   globalIndex: number;
   text: string;
