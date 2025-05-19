@@ -20,7 +20,7 @@ const pageSelect = {
   id: pages.id,
   section: pages.section,
   sectionName: pages.sectionName,
-  symbol: pages.symbol,
+  corpusSymbol: pages.corpusSymbol,
   pageNumber: pages.pageNumber,
   globalIndex: pages.globalIndex,
   text: pages.text,
@@ -63,7 +63,7 @@ export const appRouter = t.router({
       return await db
         .select(pageSelect)
         .from(pages)
-        .where(eq(pages.symbol, input.symbol));
+        .where(eq(pages.corpusSymbol, input.symbol));
     }),
 
   getSections: t.procedure.query(async () => {
