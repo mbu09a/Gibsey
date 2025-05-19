@@ -71,7 +71,7 @@ export const appRouter = t.router({
   }),
 
   getSymbols: t.procedure.query(async () => {
-    const dir = join(__dirname, '../../the-corpus/symbols');
+    const dir = join(__dirname, '../../../the-corpus/symbols');
     const files = readdirSync(dir);
     return files.filter((f) => f.endsWith('.svg'));
   }),
