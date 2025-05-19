@@ -13,6 +13,7 @@ const PageDisplay: React.FC<PageDisplayProps> = ({ section, index, page }) => {
   const { data, isLoading } = (!page && section && index)
     ? trpc.getPageById.useQuery({ section, index })
     : { data: page, isLoading: false };
+  const { data: metaList } = trpc.getSymbols.useQuery();
 
   if (isLoading) {
     return <div className="bg-black text-terminal-green p-4">Loading...</div>;
@@ -23,11 +24,20 @@ const PageDisplay: React.FC<PageDisplayProps> = ({ section, index, page }) => {
 
   // corpusSymbol values do not include the .svg extension
   const symbolSrc = `/the-corpus/symbols/${data.corpusSymbol}.svg`;
+  const meta = metaList?.find(m => m.filename.replace('.svg', '') === data.corpusSymbol);
 
   return (
     <div className="bg-black text-terminal-green p-4 border border-terminal-green">
       <h2 className="text-xl mb-2">{data.sectionName}</h2>
-      <img src={symbolSrc} alt={data.sectionName} className="w-12 h-12 mb-2" />
+      <img
+        src={symbolSrc}
+        alt={data.sectionName}
+        className="w-12 h-12 mb-2 border"
+        style={{ borderColor: meta?.color }}
+      />
+      {meta?.orientation && (
+        <div className="mb-2">Orientation: {meta.orientation}</div>
+      )}
       <pre className="whitespace-pre-wrap font-mono">{data.text}</pre>
     </div>
   );

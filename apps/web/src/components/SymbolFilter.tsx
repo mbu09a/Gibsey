@@ -18,10 +18,15 @@ const SymbolFilter: React.FC = () => {
       >
         <option value="">Filter by symbol</option>
         {symbols?.map(s => {
-          const value = s.replace('.svg', '');
+          const value = s.filename.replace('.svg', '');
           return (
-            <option key={value} value={value}>
+            <option
+              key={value}
+              value={value}
+              style={{ color: s.color }}
+            >
               {value}
+              {s.orientation ? ` (${s.orientation})` : ''}
             </option>
           );
         })}

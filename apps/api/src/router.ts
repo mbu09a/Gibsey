@@ -5,12 +5,13 @@ import { trpcServer } from '@hono/trpc-server';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
 import { pages, sections } from '../../../packages/db/src/schema';
-import { readdirSync } from 'fs';
-import { join } from 'path';
+import { symbolMetadata } from '../../../the-corpus/symbols/metadata';
 import { eq, and, like } from 'drizzle-orm';
 import { z } from 'zod';
 import { authMiddleware } from '../auth/middleware';
 import colorMap from '../../../the-corpus/colors';
+import { join } from 'path';
+import { readdirSync } from 'fs';
 
 export const db = drizzle(new Database('db.sqlite'));
 
@@ -72,6 +73,10 @@ export const appRouter = t.router({
   }),
 
   getSymbols: t.procedure.query(async () => {
+    if (symbolMetadata && Array.isArray(symbolMetadata) && symbolMetadata.length > 0) {
+      return symbolMetadata;
+    }
+    // Fallback: read from directory
     const dir = join(__dirname, '../../../the-corpus/symbols');
     const files = readdirSync(dir);
     return files.filter((f) => f.endsWith('.svg'));
