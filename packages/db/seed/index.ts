@@ -10,7 +10,11 @@ async function seed() {
   await db.delete(pages);
   await db.delete(sections);
 
-  const sectionMap: Array<{ section: number; section_name: string }> = JSON.parse(
+  const sectionMap: Array<{
+    section: number;
+    section_name: string;
+    connected_character: string;
+  }> = JSON.parse(
     await readFile(new URL('./entrance-way-section-map.json', import.meta.url), 'utf8'),
   );
 
@@ -39,6 +43,7 @@ async function seed() {
       id: page.global_index,
       section: sectionRecord.section,
       sectionName: currentSection,
+      corpusSymbol: sectionRecord.connected_character,
       pageNumber: page.page_number,
       globalIndex: page.global_index,
       text: page.text,

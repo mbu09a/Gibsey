@@ -10,6 +10,7 @@ export const pages = sqliteTable('pages', {
   id: integer('id').primaryKey(),
   section: integer('section').references(() => sections.id).notNull(),
   sectionName: text('section_name').notNull(),
+  corpusSymbol: text('corpus_symbol').notNull(),
   pageNumber: integer('page_number').notNull(),
   globalIndex: integer('global_index').notNull().unique(),
   text: text('text').notNull(),

@@ -28,10 +28,10 @@ beforeEach(() => {
 
 describe('getPageById', () => {
   it('returns page when found', async () => {
-    mockDb.where.mockResolvedValue([{ id: 1 }]);
+    mockDb.where.mockResolvedValue([{ id: 1, corpusSymbol: 'glyph' }]);
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.getPageById({ section: 1, index: 1 });
-    expect(result).toEqual({ id: 1 });
+    expect(result).toEqual({ id: 1, corpusSymbol: 'glyph' });
   });
 
   it('returns null when not found', async () => {
@@ -44,7 +44,10 @@ describe('getPageById', () => {
 
 describe('getPagesBySection', () => {
   it('returns pages list', async () => {
-    const pages = [{ id: 1 }, { id: 2 }];
+    const pages = [
+      { id: 1, corpusSymbol: 'glyph' },
+      { id: 2, corpusSymbol: 'glyph' },
+    ];
     mockDb.where.mockResolvedValue(pages);
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.getPagesBySection({ section: 1 });
@@ -54,11 +57,24 @@ describe('getPagesBySection', () => {
 
 describe('searchPages', () => {
   it('returns matched pages', async () => {
-    const pages = [{ id: 3 }];
+    const pages = [{ id: 3, corpusSymbol: 'glyph' }];
     mockDb.where.mockResolvedValue(pages);
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.searchPages({ query: 'hello' });
     expect(result).toEqual(pages);
+  });
+});
+
+describe('getPagesBySymbol', () => {
+  it('returns pages for a symbol', async () => {
+    const pagesBySymbol = [
+      { id: 4, corpusSymbol: 'glyph' },
+      { id: 5, corpusSymbol: 'glyph' },
+    ];
+    mockDb.where.mockResolvedValue(pagesBySymbol);
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    const result = await caller.getPagesBySymbol({ symbol: 'glyph' });
+    expect(result).toEqual(pagesBySymbol);
   });
 });
 

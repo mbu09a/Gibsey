@@ -4,7 +4,7 @@ import type { Context } from 'hono';
 import { trpcServer } from '@hono/trpc-server';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
-import { pages, sections } from '../../packages/db/src/schema';
+import { pages, sections } from '../../../packages/db/src/schema';
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import { eq, and, like } from 'drizzle-orm';
@@ -45,6 +45,15 @@ export const appRouter = t.router({
         .select()
         .from(pages)
         .where(like(pages.text, `%${input.query}%`));
+    }),
+
+  getPagesBySymbol: t.procedure
+    .input(z.object({ symbol: z.string() }))
+    .query(async ({ input }) => {
+      return await db
+        .select()
+        .from(pages)
+        .where(eq(pages.corpusSymbol, input.symbol));
     }),
 
   getSections: t.procedure.query(async () => {
