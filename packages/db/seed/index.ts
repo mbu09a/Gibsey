@@ -2,7 +2,7 @@ import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { pages, sections } from '../src/schema';
 import { readFile } from 'fs/promises';
-import { characterToSymbol } from './symbol-map';
+import { characterToSymbol } from './symbol-map'; // Always import from your canonical helper
 
 const db = drizzle(new Database('db.sqlite'));
 
@@ -14,8 +14,6 @@ async function seed() {
   const sectionMap: Array<{ section: number; section_name: string; connected_character: string }> = JSON.parse(
     await readFile(new URL('./entrance-way-section-map.json', import.meta.url), 'utf8'),
   );
-
-  // Helper to map characters to their canonical corpus symbol
 
   for (const s of sectionMap) {
     const corpusSymbol = characterToSymbol(s.connected_character);
