@@ -1,6 +1,5 @@
 import re
 
-
 def chunk_text(text, section_map):
     pattern = re.compile(r"###Page (\d+)###")
     matches = list(pattern.finditer(text))
