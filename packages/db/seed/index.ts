@@ -2,7 +2,7 @@ import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { pages, sections } from '../src/schema';
 import { readFile } from 'fs/promises';
-import { characterToSymbol, symbolOverrides } from '../../utils/characterToSymbol';
+import { characterToSymbol } from './symbol-map'; // Always import from your canonical helper
 
 const db = drizzle(new Database('db.sqlite'));
 
@@ -15,11 +15,8 @@ async function seed() {
     await readFile(new URL('./entrance-way-section-map.json', import.meta.url), 'utf8'),
   );
 
-  // Optional overrides for special cases
-  const symbolMap = symbolOverrides;
-
   for (const s of sectionMap) {
-    const corpusSymbol = symbolMap[s.connected_character] || characterToSymbol(s.connected_character);
+    const corpusSymbol = characterToSymbol(s.connected_character);
     await db.insert(sections).values({
       id: s.section,
       sectionName: s.section_name,
@@ -32,6 +29,7 @@ async function seed() {
     page_number: number;
     section: string | null;
     text: string;
+    corpus_symbol?: string;
   }> = JSON.parse(
     await readFile(new URL('./the-entrance-way-pages.json', import.meta.url), 'utf8'),
   );
@@ -43,7 +41,7 @@ async function seed() {
       (s) => s.section_name.toLowerCase() === currentSection.toLowerCase(),
     );
     if (!sectionRecord) continue;
-    const corpusSymbol = symbolMap[sectionRecord.connected_character] || characterToSymbol(sectionRecord.connected_character);
+    const corpusSymbol = characterToSymbol(sectionRecord.connected_character);
 
     await db.insert(pages).values({
       id: page.global_index,
