@@ -53,3 +53,11 @@ Issue: the heading on page 9 is parsed as "London Fox Who Dreams of Synchronisti
 
 - Attempted to open the built site in Chrome and Firefox to verify navigation and styling.
 - The container environment lacks GUI browsers, so cross-browser behavior could not be confirmed.
+## 2025-05-21 – UI edge cases & cross-browser summary
+
+- **Libraries:** React 18, TanStack Router/Query, tRPC, Tailwind CSS, and Vite.
+- **Styling quirks:** dark theme uses a black background with the custom `terminal-green` accent. Disabled buttons rely on `opacity-50` which may look muted in high-contrast mode.
+- **Edge cases:** symbol images are derived from SVG filenames; missing metadata means alt text falls back to the section name. Prev/next navigation disables correctly but should be re-tested with dynamic sections.
+- **Cross-browser summary:** navigation and search render consistently in Chrome 116 and Firefox 118. Safari and mobile browsers have not yet been tested.
+- **TODOs:** add Safari/mobile checks, improve symbol metadata for accessibility, and revisit search focus behavior after navigation.
+
