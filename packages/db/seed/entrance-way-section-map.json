@@ -1,0 +1,151 @@
+[
+    {
+      "section": 1,
+      "section_name": "an author’s preface",
+      "start_page": 1,
+      "end_page": 8,
+      "connected_character": "an author",
+      "chapters": []
+    },
+    {
+      "section": 2,
+      "section_name": "London Fox Who Vertically Disintegrates",
+      "start_page": 9,
+      "end_page": 24,
+      "connected_character": "London Fox",
+      "chapters": []
+    },
+    {
+      "section": 3,
+      "section_name": "An Unexpected Disappearance: A Glyph Marrow Mystery",
+      "start_page": 25,
+      "end_page": 203,
+      "connected_character": "Glyph Marrow",
+      "chapters": [
+        { "chapter": 1, "chapter_name": "The Queue and Station", "start_page": 25, "end_page": 57 },
+        { "chapter": 2, "chapter_name": "The Tunnel", "start_page": 58, "end_page": 74 },
+        { "chapter": 3, "chapter_name": "The First Ascent", "start_page": 75, "end_page": 109 },
+        { "chapter": 4, "chapter_name": "The Flooded Town", "start_page": 110, "end_page": 141 },
+        { "chapter": 5, "chapter_name": "The Waterfall", "start_page": 142, "end_page": 176 },
+        { "chapter": 6, "chapter_name": "The Tunneled Vision", "start_page": 177, "end_page": 203 }
+      ]
+    },
+    {
+      "section": 4,
+      "section_name": "An Expected Appearance: A Phillip Bafflemint Noir",
+      "start_page": 204,
+      "end_page": 235,
+      "connected_character": "Phillip Bafflemint",
+      "chapters": [
+        { "chapter": 1, "chapter_name": "The Tunneled Vision", "start_page": 204, "end_page": 217 },
+        { "chapter": 2, "chapter_name": "The Flooded House", "start_page": 218, "end_page": 228 },
+        { "chapter": 3, "chapter_name": "The First Descent", "start_page": 229, "end_page": 235 }
+      ]
+    },
+    {
+      "section": 5,
+      "section_name": "Jacklyn Variance, The Watcher, is Watched",
+      "start_page": 236,
+      "end_page": 307,
+      "connected_character": "Jacklyn Variance",
+      "chapters": []
+    },
+    {
+      "section": 6,
+      "section_name": "The Last Auteur",
+      "start_page": 308,
+      "end_page": 354,
+      "connected_character": "Oren Progresso",
+      "chapters": []
+    },
+    {
+      "section": 7,
+      "section_name": "Gibseyan Mysticism and its Symbolism",
+      "start_page": 355,
+      "end_page": 380,
+      "connected_character": "Old Natalie Weissman",
+      "chapters": []
+    },
+    {
+      "section": 8,
+      "section_name": "Princhetta Who Thinks Herself Alive",
+      "start_page": 381,
+      "end_page": 385,
+      "connected_character": "Princhetta",
+      "chapters": []
+    },
+    {
+      "section": 9,
+      "section_name": "Petition for Bankruptcy- Chapter 11, by Perdition Books, a Subsidiary of Skingraft Publishing",
+      "start_page": 386,
+      "end_page": 411,
+      "connected_character": "Cop-E-Right",
+      "chapters": []
+    },
+    {
+      "section": 10,
+      "section_name": "The Tempestuous Storm",
+      "start_page": 412,
+      "end_page": 432,
+      "connected_character": "New Natalie Weissman",
+      "chapters": []
+    },
+    {
+      "section": 11,
+      "section_name": "Arieol Owlist Who Wants to Achieve Agency",
+      "start_page": 433,
+      "end_page": 487,
+      "connected_character": "Arieol Owlist",
+      "chapters": []
+    },
+    {
+      "section": 12,
+      "section_name": "The Biggest Shit of All Time",
+      "start_page": 488,
+      "end_page": 500,
+      "connected_character": "Jack Parlance",
+      "chapters": []
+    },
+    {
+      "section": 13,
+      "section_name": "An Expected Appearance: A Phillip Bafflemint Noir",
+      "start_page": 501,
+      "end_page": 564,
+      "connected_character": "Manny Valentinas",
+      "chapters": [
+        { "chapter": 4, "chapter_name": "The Slip and The Mistake", "start_page": 501, "end_page": 526 },
+        { "chapter": 5, "chapter_name": "The Stations", "start_page": 527, "end_page": 545 },
+        { "chapter": 6, "chapter_name": "The Third Ascent", "start_page": 546, "end_page": 564 }
+      ]
+    },
+    {
+      "section": 14,
+      "section_name": "An Unexpected Disappearance: A Glyph Marrow Mystery",
+      "start_page": 565,
+      "end_page": 641,
+      "connected_character": "Shamrock Stillman",
+      "chapters": [
+        { "chapter": 7, "chapter_name": "The Rainbows", "start_page": 565, "end_page": 584 },
+        { "chapter": 8, "chapter_name": "The Caves", "start_page": 585, "end_page": 603 },
+        { "chapter": 9, "chapter_name": "The Third Ascent", "start_page": 604, "end_page": 611 },
+        { "chapter": 10, "chapter_name": "The Geyser", "start_page": 612, "end_page": 623 },
+        { "chapter": 11, "chapter_name": "The Return to the Station", "start_page": 624, "end_page": 641 }
+      ]
+    },
+    {
+      "section": 15,
+      "section_name": "Todd Fishbone Who Dreams of Synchronistic Extraction",
+      "start_page": 642,
+      "end_page": 677,
+      "connected_character": "Todd Fishbone",
+      "chapters": []
+    },
+    {
+      "section": 16,
+      "section_name": "The Author's Preface",
+      "start_page": 678,
+      "end_page": 710,
+      "connected_character": "The Author",
+      "chapters": []
+    }
+  ]  
