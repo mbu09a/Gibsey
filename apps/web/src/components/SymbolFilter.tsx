@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { trpc } from '../utils/trpc';
 
-const SymbolFilter: React.FC = () => {
+const SymbolFilter: React.FC<{ color?: string }> = ({ color = '#00FF00' }) => {
   const { data: symbols } = trpc.getSymbols.useQuery();
   const [symbol, setSymbol] = useState('');
   const { data: pages } = trpc.getPagesBySymbol.useQuery(
@@ -10,11 +10,12 @@ const SymbolFilter: React.FC = () => {
   );
 
   return (
-    <div className="bg-black text-terminal-green p-4 border border-terminal-green">
+    <div className="bg-black text-terminal-green p-4 border" style={{ borderColor: color }}>
       <select
         value={symbol}
         onChange={e => setSymbol(e.target.value)}
-        className="bg-black border border-terminal-green text-terminal-green px-2 py-1 mb-2"
+        className="bg-black border text-terminal-green px-2 py-1 mb-2"
+        style={{ borderColor: color }}
       >
         <option value="">Filter by symbol</option>
         {symbols?.map(s => {

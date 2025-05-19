@@ -2,6 +2,7 @@ export interface Section {
   id: number;
   sectionName: string;
   corpusSymbol: string;
+  color: string;
 }
 
 export interface Page {
@@ -9,6 +10,7 @@ export interface Page {
   section: number;
   sectionName: string;
   corpusSymbol: string;
+  color: string;
   pageNumber: number;
   globalIndex: number;
   text: string;

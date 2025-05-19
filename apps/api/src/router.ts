@@ -38,38 +38,56 @@ export const appRouter = t.router({
         .select(pageSelect)
         .from(pages)
         .where(and(eq(pages.section, input.section), eq(pages.pageNumber, input.index)));
-      return result[0] ?? null;
+      if (!result[0]) return null;
+      const sectionColor = colorMap[result[0].sectionName] ?? '#00FF00';
+      return { ...result[0], color: sectionColor };
     }),
 
   getPagesBySection: t.procedure
     .input(z.object({ section: z.number() }))
     .query(async ({ input }) => {
-      return await db
+      const res = await db
         .select(pageSelect)
         .from(pages)
         .where(eq(pages.section, input.section));
+      return res.map(p => ({
+        ...p,
+        color: colorMap[p.sectionName] ?? '#00FF00'
+      }));
     }),
 
   searchPages: t.procedure
     .input(z.object({ query: z.string() }))
     .query(async ({ input }) => {
-      return await db
+      const res = await db
         .select(pageSelect)
         .from(pages)
         .where(like(pages.text, `%${input.query}%`));
+      return res.map(p => ({
+        ...p,
+        color: colorMap[p.sectionName] ?? '#00FF00'
+      }));
     }),
 
   getPagesBySymbol: t.procedure
     .input(z.object({ symbol: z.string() }))
     .query(async ({ input }) => {
-      return await db
+      const res = await db
         .select(pageSelect)
         .from(pages)
         .where(eq(pages.corpusSymbol, input.symbol));
+      return res.map(p => ({
+        ...p,
+        color: colorMap[p.sectionName] ?? '#00FF00'
+      }));
     }),
 
   getSections: t.procedure.query(async () => {
-    return await db.select().from(sections);
+    const secs = await db.select().from(sections);
+    return secs.map(s => ({
+      ...s,
+      color: colorMap[s.sectionName] ?? '#00FF00'
+    }));
   }),
 
   getSymbols: t.procedure.query(async () => {

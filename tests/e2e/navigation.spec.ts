@@ -49,4 +49,15 @@ test.describe('display and theme', () => {
     await expect(page.locator('body')).toHaveClass(/bg-black/);
     await expect(page.locator('body')).toHaveClass(/text-terminal-green/);
   });
+
+  test('section color updates borders', async ({ page }) => {
+    await page.goto('/');
+
+    const container = page.locator('[data-testid="app-root"]');
+    const initial = await container.evaluate(el => getComputedStyle(el).borderTopColor);
+
+    await page.getByRole('combobox').first().selectOption('2');
+    const changed = await container.evaluate(el => getComputedStyle(el).borderTopColor);
+    expect(changed).not.toBe(initial);
+  });
 });

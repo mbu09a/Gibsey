@@ -3,9 +3,10 @@ import { trpc } from '../utils/trpc';
 
 export interface SearchJumpProps {
   onSelect: (section: number, index: number) => void;
+  color?: string;
 }
 
-const SearchJump: React.FC<SearchJumpProps> = ({ onSelect }) => {
+const SearchJump: React.FC<SearchJumpProps> = ({ onSelect, color = '#00FF00' }) => {
   const [query, setQuery] = useState('');
   const [jumpSection, setJumpSection] = useState(1);
   const [jumpPage, setJumpPage] = useState(1);
@@ -16,16 +17,17 @@ const SearchJump: React.FC<SearchJumpProps> = ({ onSelect }) => {
   const handleJump = () => onSelect(jumpSection, jumpPage);
 
   return (
-    <div className="bg-black text-terminal-green p-4 border border-terminal-green">
+    <div className="bg-black text-terminal-green p-4 border" style={{ borderColor: color }}>
       <div className="mb-2 flex gap-2">
         <input
           type="text"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          className="bg-black border border-terminal-green text-terminal-green px-2 py-1 flex-grow"
+          className="bg-black border text-terminal-green px-2 py-1 flex-grow"
+          style={{ borderColor: color }}
           placeholder="Search"
         />
-        <button onClick={handleSearch} className="border border-terminal-green px-2 py-1">Search</button>
+        <button onClick={handleSearch} className="border px-2 py-1" style={{ borderColor: color }}>Search</button>
       </div>
       {search.data && (
         <ul className="mb-2 max-h-40 overflow-y-auto">
@@ -46,15 +48,17 @@ const SearchJump: React.FC<SearchJumpProps> = ({ onSelect }) => {
           type="number"
           value={jumpSection}
           onChange={e => setJumpSection(Number(e.target.value))}
-          className="bg-black border border-terminal-green text-terminal-green px-2 py-1 w-20"
+          className="bg-black border text-terminal-green px-2 py-1 w-20"
+          style={{ borderColor: color }}
         />
         <input
           type="number"
           value={jumpPage}
           onChange={e => setJumpPage(Number(e.target.value))}
-          className="bg-black border border-terminal-green text-terminal-green px-2 py-1 w-20"
+          className="bg-black border text-terminal-green px-2 py-1 w-20"
+          style={{ borderColor: color }}
         />
-        <button onClick={handleJump} className="border border-terminal-green px-2 py-1">Go</button>
+        <button onClick={handleJump} className="border px-2 py-1" style={{ borderColor: color }}>Go</button>
       </div>
     </div>
   );
