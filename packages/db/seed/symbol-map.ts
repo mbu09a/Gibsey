@@ -1,20 +1,20 @@
 export const symbolMap: Record<string, string> = {
-  "The Author": "The_Author.svg",
-  "an author": "an_author.svg",
-  "Arieol Owlist": "arieol_owlist.svg",
-  "Cop-E-Right": "cop-e-right.svg",
-  "Glyph Marrow": "glyph_marrow.svg",
-  "Jack Parlance": "jack_parlance.svg",
-  "Jacklyn Variance": "jacklyn_variance.svg",
-  "London Fox": "london_fox.svg",
-  "Manny Valentinas": "manny_valentinas.svg",
-  "New Natalie Weissman": "new_natalie_weissman.svg",
-  "Old Natalie Weissman": "old_natalie_weissman.svg",
-  "Oren Progresso": "oren_progresso.svg",
-  "Phillip Bafflemint": "phillip_bafflemint.svg",
-  "Princhetta": "princhetta.svg",
-  "Shamrock Stillman": "shamrock_stillman.svg",
-  "Todd Fishbone": "todd_fishbone.svg",
+  "The Author": "The_Author",
+  "an author": "an_author",
+  "Arieol Owlist": "arieol_owlist",
+  "Cop-E-Right": "cop-e-right",
+  "Glyph Marrow": "glyph_marrow",
+  "Jack Parlance": "jack_parlance",
+  "Jacklyn Variance": "jacklyn_variance",
+  "London Fox": "london_fox",
+  "Manny Valentinas": "manny_valentinas",
+  "New Natalie Weissman": "new_natalie_weissman",
+  "Old Natalie Weissman": "old_natalie_weissman",
+  "Oren Progresso": "oren_progresso",
+  "Phillip Bafflemint": "phillip_bafflemint",
+  "Princhetta": "princhetta",
+  "Shamrock Stillman": "shamrock_stillman",
+  "Todd Fishbone": "todd_fishbone",
 };
 
 function slugify(name: string): string {
@@ -26,5 +26,5 @@ function slugify(name: string): string {
 
 export function characterToSymbol(name: string): string {
   if (name in symbolMap) return symbolMap[name];
-  return `${slugify(name)}.svg`;
+  return slugify(name);
 }

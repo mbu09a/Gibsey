@@ -22,6 +22,7 @@ const PageDisplay: React.FC<PageDisplayProps> = ({ section, index, page }) => {
     return <div className="bg-black text-terminal-green p-4">Page not found</div>;
   }
 
+  // corpusSymbol values do not include the .svg extension
   const symbolSrc = `/the-corpus/symbols/${data.corpusSymbol}.svg`;
   const meta = metaList?.find(m => m.filename.replace('.svg', '') === data.corpusSymbol);
 

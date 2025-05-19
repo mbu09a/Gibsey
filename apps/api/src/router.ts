@@ -9,6 +9,9 @@ import { symbolMetadata } from '../../../the-corpus/symbols/metadata';
 import { eq, and, like } from 'drizzle-orm';
 import { z } from 'zod';
 import { authMiddleware } from '../auth/middleware';
+import colorMap from '../../../the-corpus/colors';
+import { join } from 'path';
+import { readdirSync } from 'fs';
 
 export const db = drizzle(new Database('db.sqlite'));
 
@@ -19,7 +22,7 @@ const pageSelect = {
   id: pages.id,
   section: pages.section,
   sectionName: pages.sectionName,
-  symbol: pages.symbol,
+  corpusSymbol: pages.corpusSymbol,
   pageNumber: pages.pageNumber,
   globalIndex: pages.globalIndex,
   text: pages.text,
@@ -62,7 +65,7 @@ export const appRouter = t.router({
       return await db
         .select(pageSelect)
         .from(pages)
-        .where(eq(pages.symbol, input.symbol));
+        .where(eq(pages.corpusSymbol, input.symbol));
     }),
 
   getSections: t.procedure.query(async () => {
@@ -70,7 +73,17 @@ export const appRouter = t.router({
   }),
 
   getSymbols: t.procedure.query(async () => {
-    return symbolMetadata;
+    if (symbolMetadata && Array.isArray(symbolMetadata) && symbolMetadata.length > 0) {
+      return symbolMetadata;
+    }
+    // Fallback: read from directory
+    const dir = join(__dirname, '../../../the-corpus/symbols');
+    const files = readdirSync(dir);
+    return files.filter((f) => f.endsWith('.svg'));
+  }),
+
+  getCorpusMetadata: t.procedure.query(async () => {
+    return { colors: colorMap };
   }),
 });
 
