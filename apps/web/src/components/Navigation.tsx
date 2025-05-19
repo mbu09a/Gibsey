@@ -36,18 +36,18 @@ const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate, sec
   };
 
   return (
-    <div className="bg-black text-green-500 p-4 border border-green-500 flex items-center gap-4">
+    <div className="bg-black text-terminal-green p-4 border border-terminal-green flex items-center gap-4">
       <button
         onClick={handlePrev}
         disabled={prevDisabled}
-        className="border border-green-500 px-2 py-1 disabled:opacity-50"
+        className="border border-terminal-green px-2 py-1 disabled:opacity-50"
       >
         Prev
       </button>
       <select
         value={section}
         onChange={e => onNavigate(Number(e.target.value), 1)}
-        className="bg-black border border-green-500 text-green-500 px-2 py-1"
+        className="bg-black border border-terminal-green text-terminal-green px-2 py-1"
       >
         {sectionArray.map(sec =>
           <option key={sec.id} value={sec.id}>
@@ -58,7 +58,7 @@ const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate, sec
       <button
         onClick={handleNext}
         disabled={nextDisabled}
-        className="border border-green-500 px-2 py-1 disabled:opacity-50"
+        className="border border-terminal-green px-2 py-1 disabled:opacity-50"
       >
         Next
       </button>
