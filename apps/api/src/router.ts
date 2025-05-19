@@ -5,12 +5,13 @@ import { trpcServer } from '@hono/trpc-server';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
 import { pages, sections } from '../../../packages/db/src/schema';
-import { readdirSync } from 'fs';
-import { join } from 'path';
+import { symbolMetadata } from '../../../the-corpus/symbols/metadata';
 import { eq, and, like } from 'drizzle-orm';
 import { z } from 'zod';
 import { authMiddleware } from '../auth/middleware';
-import { sectionColors } from '../../../packages/utils/sectionColors';
+import colorMap from '../../../the-corpus/colors';
+import { join } from 'path';
+import { readdirSync } from 'fs';
 
 export const db = drizzle(new Database('db.sqlite'));
 
@@ -21,7 +22,7 @@ const pageSelect = {
   id: pages.id,
   section: pages.section,
   sectionName: pages.sectionName,
-  symbol: pages.symbol,
+  corpusSymbol: pages.corpusSymbol,
   pageNumber: pages.pageNumber,
   globalIndex: pages.globalIndex,
   text: pages.text,
@@ -38,7 +39,8 @@ export const appRouter = t.router({
         .from(pages)
         .where(and(eq(pages.section, input.section), eq(pages.pageNumber, input.index)));
       if (!result[0]) return null;
-      return { ...result[0], color: sectionColors[result[0].section] ?? '#00FF00' };
+      const sectionColor = colorMap[result[0].sectionName] ?? '#00FF00';
+      return { ...result[0], color: sectionColor };
     }),
 
   getPagesBySection: t.procedure
@@ -48,7 +50,10 @@ export const appRouter = t.router({
         .select(pageSelect)
         .from(pages)
         .where(eq(pages.section, input.section));
-      return res.map(p => ({ ...p, color: sectionColors[p.section] ?? '#00FF00' }));
+      return res.map(p => ({
+        ...p,
+        color: colorMap[p.sectionName] ?? '#00FF00'
+      }));
     }),
 
   searchPages: t.procedure
@@ -58,7 +63,10 @@ export const appRouter = t.router({
         .select(pageSelect)
         .from(pages)
         .where(like(pages.text, `%${input.query}%`));
-      return res.map(p => ({ ...p, color: sectionColors[p.section] ?? '#00FF00' }));
+      return res.map(p => ({
+        ...p,
+        color: colorMap[p.sectionName] ?? '#00FF00'
+      }));
     }),
 
   getPagesBySymbol: t.procedure
@@ -67,19 +75,33 @@ export const appRouter = t.router({
       const res = await db
         .select(pageSelect)
         .from(pages)
-        .where(eq(pages.symbol, input.symbol));
-      return res.map(p => ({ ...p, color: sectionColors[p.section] ?? '#00FF00' }));
+        .where(eq(pages.corpusSymbol, input.symbol));
+      return res.map(p => ({
+        ...p,
+        color: colorMap[p.sectionName] ?? '#00FF00'
+      }));
     }),
 
   getSections: t.procedure.query(async () => {
     const secs = await db.select().from(sections);
-    return secs.map(s => ({ ...s, color: sectionColors[s.id] ?? '#00FF00' }));
+    return secs.map(s => ({
+      ...s,
+      color: colorMap[s.sectionName] ?? '#00FF00'
+    }));
   }),
 
   getSymbols: t.procedure.query(async () => {
-    const dir = join(__dirname, '../../the-corpus/symbols');
+    if (symbolMetadata && Array.isArray(symbolMetadata) && symbolMetadata.length > 0) {
+      return symbolMetadata;
+    }
+    // Fallback: read from directory
+    const dir = join(__dirname, '../../../the-corpus/symbols');
     const files = readdirSync(dir);
     return files.filter((f) => f.endsWith('.svg'));
+  }),
+
+  getCorpusMetadata: t.procedure.query(async () => {
+    return { colors: colorMap };
   }),
 });
 
