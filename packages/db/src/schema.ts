@@ -4,6 +4,7 @@ import { relations } from 'drizzle-orm';
 export const sections = sqliteTable('sections', {
   id: integer('id').primaryKey(),
   sectionName: text('section_name').notNull(),
+  corpusSymbol: text('corpus_symbol').notNull(),
 });
 
 export const pages = sqliteTable('pages', {
@@ -26,4 +27,3 @@ export const pageRelations = relations(pages, ({ one }) => ({
     references: [sections.id],
   }),
 }));
-

@@ -21,7 +21,7 @@ const PageDisplay: React.FC<PageDisplayProps> = ({ section, index, page }) => {
     return <div className="bg-black text-terminal-green p-4">Page not found</div>;
   }
 
-  const symbolSrc = `/the-corpus/symbols/${data.sectionName.replace(/\s+/g, '_')}.svg`;
+  const symbolSrc = `/the-corpus/symbols/${data.corpusSymbol}.svg`;
 
   return (
     <div className="bg-black text-terminal-green p-4 border border-terminal-green">

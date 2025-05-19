@@ -16,3 +16,4 @@ export const queryClient = new QueryClient();
 export const useGetPageById = trpc.getPageById.useQuery;
 export const useGetPagesBySection = trpc.getPagesBySection.useQuery;
 export const useSearchPages = trpc.searchPages.useQuery;
+export const useGetPagesBySymbol = trpc.getPagesBySymbol.useQuery;
