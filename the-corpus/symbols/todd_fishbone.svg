@@ -1,0 +1,12 @@
+<svg viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+  <g transform="rotate(180 500 500)">
+    <rect width="1000" height="1000" fill="#fff"/>
+    <line x1="200" y1="200" x2="800" y2="200" stroke="#000" stroke-width="60" stroke-linecap="square"/>
+    <line x1="200" y1="200" x2="200" y2="800" stroke="#000" stroke-width="60" stroke-linecap="square"/>
+    <line x1="800" y1="200" x2="800" y2="800" stroke="#000" stroke-width="60" stroke-linecap="square"/>
+    <line x1="200" y1="800" x2="0" y2="800" stroke="#000" stroke-width="60" stroke-linecap="square"/>
+    <line x1="200" y1="700" x2="0" y2="700" stroke="#000" stroke-width="60" stroke-linecap="square"/>
+    <line x1="800" y1="800" x2="1000" y2="800" stroke="#000" stroke-width="60" stroke-linecap="square"/>
+    <line x1="800" y1="700" x2="1000" y2="700" stroke="#000" stroke-width="60" stroke-linecap="square"/>
+  </g>
+</svg>

@@ -1,0 +1,46 @@
+# Node/Bun/TypeScript (web, api, packages)
+node_modules/
+bun.lockb
+*.log
+dist/
+build/
+.cache/
+.vite/
+.next/
+out/
+.temp/
+*.tsbuildinfo
+
+# Python (ai microservice)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.venv/
+pip-log.txt
+
+# Playwright E2E
+playwright-report/
+test-results/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# VSCode/editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Misc
+coverage/
+*.sqlite
+*.db

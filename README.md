@@ -135,3 +135,18 @@ If Gibsey is a cathedral, Code Xanadu is the blueprint and toolkit for building 
 
 **TL;DR:**
 Code Xanadu is the open-source toolkit that lets anyone clone, remix, and launch their own recursive, mythic narrative system—instantly and infinitely.
+
+---
+
+## Development Assets
+
+- **Entrance Way Source Text:**  
+  The full, canonical text for The Entrance Way is located at:  
+  `/packages/db/seed/the-entrance-way.txt`
+
+- **Corpus Symbols:**  
+  The 16 baseline Corpus symbol SVG files are located at:  
+  `/the-corpus`  
+  Each file corresponds to a core character/archetype and is used for navigation, tagging, and UI theming throughout the Gibsey system.
+
+---
