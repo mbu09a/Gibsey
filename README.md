@@ -165,4 +165,8 @@ newer), and **Python 3** installed.
   `/the-corpus`  
   Each file corresponds to a core character/archetype and is used for navigation, tagging, and UI theming throughout the Gibsey system.
 
+## Running Tests
+
+Run the TypeScript unit tests with `bun test`. Python tests are executed with `pytest`.
+
 ---

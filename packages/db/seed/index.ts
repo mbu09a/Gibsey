@@ -2,6 +2,7 @@ import { Database } from 'bun:sqlite';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { pages, sections } from '../src/schema';
 import { readFile } from 'fs/promises';
+import { characterToSymbol, symbolOverrides } from '../../utils/characterToSymbol';
 
 const db = drizzle(new Database('db.sqlite'));
 
@@ -14,22 +15,11 @@ async function seed() {
     await readFile(new URL('./entrance-way-section-map.json', import.meta.url), 'utf8'),
   );
 
-  // Canonical slug function
-  const slug = (name: string) =>
-    name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '_')
-      .replace(/^_|_$/g, '');
-
-  // Optional: provide a symbolMap for overrides if you ever want to support special cases
-  const symbolMap: Record<string, string> = {
-    // Add only if you need a mapping that slug() can't cover
-    // 'The Author': 'the_author',
-    // ...
-  };
+  // Optional overrides for special cases
+  const symbolMap = symbolOverrides;
 
   for (const s of sectionMap) {
-    const corpusSymbol = symbolMap[s.connected_character] || slug(s.connected_character);
+    const corpusSymbol = symbolMap[s.connected_character] || characterToSymbol(s.connected_character);
     await db.insert(sections).values({
       id: s.section,
       sectionName: s.section_name,
@@ -53,7 +43,7 @@ async function seed() {
       (s) => s.section_name.toLowerCase() === currentSection.toLowerCase(),
     );
     if (!sectionRecord) continue;
-    const corpusSymbol = symbolMap[sectionRecord.connected_character] || slug(sectionRecord.connected_character);
+    const corpusSymbol = symbolMap[sectionRecord.connected_character] || characterToSymbol(sectionRecord.connected_character);
 
     await db.insert(pages).values({
       id: page.global_index,
