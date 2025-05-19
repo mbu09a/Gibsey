@@ -94,6 +94,7 @@ the `connected_character` names from `entrance-way-section-map.json` and maps
 them to the symbol SVGs. An optional `symbolMap` object overrides any slugs that
 do not match a file name exactly. The definitive list of symbols lives in
 [/the-corpus/README.md](../the-corpus/README.md).
+A color mapping for these characters now lives in [../the-corpus/colors.ts](../the-corpus/colors.ts) and is also documented in the corpus README.
 
 ### Regeneration steps
 

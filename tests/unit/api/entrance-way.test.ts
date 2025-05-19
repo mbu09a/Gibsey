@@ -15,6 +15,7 @@ vi.mock('bun:sqlite', () => ({ Database: class {} }));
 vi.mock('@trpc/server', () => ({ initTRPC: () => ({ context: () => ({ create: () => ({ router: (obj: any) => obj }) }) }) }));
 vi.mock('drizzle-orm', () => ({ eq: () => ({}), and: () => ({}), like: () => ({}) }));
 vi.mock('../../../apps/api/auth/middleware', () => ({ authMiddleware: () => {} }));
+vi.mock('../../../packages/db/src/schema.ts', () => ({ pages: {}, sections: {} }));
 
 import * as router from '../../../apps/api/src/router';
 
@@ -140,5 +141,14 @@ describe('getSymbols', () => {
     const caller = router.appRouter.createCaller({ user: null } as any);
     const result = await caller.getSymbols();
     expect(result).toEqual(['a.svg']);
+  });
+});
+
+describe('getCorpusMetadata', () => {
+  it('returns color mapping', async () => {
+    const caller = router.appRouter.createCaller({ user: null } as any);
+    const result = await caller.getCorpusMetadata();
+    expect(result).toHaveProperty('colors');
+    expect(result.colors).toBeDefined();
   });
 });
