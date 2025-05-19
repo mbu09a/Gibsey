@@ -1,18 +1,22 @@
 import React from 'react';
 import { trpc } from '../utils/trpc';
+import type { Page } from '../../../packages/types/entrance-way';
 
 export interface PageDisplayProps {
-  section: number;
-  index: number;
+  section?: number;
+  index?: number;
+  page?: Page | null;
 }
 
-const PageDisplay: React.FC<PageDisplayProps> = ({ section, index }) => {
-  const { data, isLoading } = trpc.getPageById.useQuery({ section, index });
+const PageDisplay: React.FC<PageDisplayProps> = ({ section, index, page }) => {
+  // If page is not provided, fetch from API
+  const { data, isLoading } = (!page && section && index)
+    ? trpc.getPageById.useQuery({ section, index })
+    : { data: page, isLoading: false };
 
   if (isLoading) {
     return <div className="bg-black text-green-500 p-4">Loading...</div>;
   }
-
   if (!data) {
     return <div className="bg-black text-green-500 p-4">Page not found</div>;
   }

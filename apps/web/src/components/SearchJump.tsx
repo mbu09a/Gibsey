@@ -12,13 +12,8 @@ const SearchJump: React.FC<SearchJumpProps> = ({ onSelect }) => {
 
   const search = trpc.searchPages.useQuery({ query }, { enabled: false });
 
-  const handleSearch = () => {
-    search.refetch();
-  };
-
-  const handleJump = () => {
-    onSelect(jumpSection, jumpPage);
-  };
+  const handleSearch = () => search.refetch();
+  const handleJump = () => onSelect(jumpSection, jumpPage);
 
   return (
     <div className="bg-black text-green-500 p-4 border border-green-500">

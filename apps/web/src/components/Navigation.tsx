@@ -1,17 +1,25 @@
 import React from 'react';
 import { trpc } from '../utils/trpc';
+import type { Section } from '../../../packages/types/entrance-way';
+import { Link } from '@tanstack/react-router';
 
 export interface NavigationProps {
   section: number;
   index: number;
   onNavigate: (section: number, index: number) => void;
+  sections?: Section[];
 }
 
-const sections = Array.from({ length: 16 }, (_, i) => i + 1);
+const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate, sections }) => {
+  // Optionally fetch sections from API if not provided
+  const { data: sectionList } = trpc.getSections
+    ? trpc.getSections.useQuery(undefined, { enabled: !sections })
+    : { data: sections };
 
-const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate }) => {
+  // Always fall back to prop or API data
+  const sectionArray: Section[] = sections ?? sectionList ?? [];
+
   const { data: pages } = trpc.getPagesBySection.useQuery({ section });
-
   const pageNumbers = pages?.map(p => p.pageNumber) ?? [];
   const minIndex = Math.min(...pageNumbers, 1);
   const maxIndex = Math.max(...pageNumbers, 1);
@@ -41,9 +49,11 @@ const Navigation: React.FC<NavigationProps> = ({ section, index, onNavigate }) =
         onChange={e => onNavigate(Number(e.target.value), 1)}
         className="bg-black border border-green-500 text-green-500 px-2 py-1"
       >
-        {sections.map(sec => (
-          <option key={sec} value={sec}>Section {sec}</option>
-        ))}
+        {sectionArray.map(sec =>
+          <option key={sec.id} value={sec.id}>
+            {sec.sectionName}
+          </option>
+        )}
       </select>
       <button
         onClick={handleNext}
