@@ -43,3 +43,8 @@ Issue: the heading on page 9 is parsed as "London Fox Who Dreams of Synchronisti
   - Minor typographic variations on pages 1, 236 and 355.
 
 
+
+## 2025-05-19 – UI cross-browser attempt
+
+- Attempted to open the built site in Chrome and Firefox to verify navigation and styling.
+- The container environment lacks GUI browsers, so cross-browser behavior could not be confirmed.
