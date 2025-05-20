@@ -9,3 +9,7 @@ Common TypeScript types and interfaces shared across the Gibsey project.
 - `GetPageByIdParams`, `GetPagesBySectionParams`, `SearchPagesParams` – input shapes for the API procedures.
 - `GetPageByIdResult`, `GetPagesBySectionResult`, `SearchPagesResult` – return types from the API.
 
+
+### Vault
+
+`vault.ts` defines interfaces for entries stored in the Vault and related procedure params.

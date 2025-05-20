@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, integer, text, index } from 'drizzle-orm/sqlite-core';
 import { relations } from 'drizzle-orm';
 
 export const sections = sqliteTable('sections', {
@@ -27,3 +27,18 @@ export const pageRelations = relations(pages, ({ one }) => ({
     references: [sections.id],
   }),
 }));
+
+export const vaultEntries = sqliteTable(
+  'vault_entries',
+  {
+    id: integer('id').primaryKey(),
+    actorId: text('actor_id').notNull(),
+    state: text('state').notNull(),
+    content: text('content').notNull(),
+    createdAt: integer('created_at').notNull(),
+  },
+  (t) => ({
+    actorIdx: index('idx_vault_actor').on(t.actorId),
+    createdIdx: index('idx_vault_created').on(t.createdAt),
+  })
+);

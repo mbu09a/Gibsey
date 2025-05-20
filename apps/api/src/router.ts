@@ -4,7 +4,7 @@ import type { Context } from 'hono';
 import { trpcServer } from '@hono/trpc-server';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
-import { pages, sections } from '../../../packages/db/src/schema';
+import { pages, sections, vaultEntries } from '../../../packages/db/src/schema';
 import { symbolMetadata } from '../../../the-corpus/symbols/metadata';
 import { eq, and, like } from 'drizzle-orm';
 import { z } from 'zod';
@@ -12,6 +12,7 @@ import { authMiddleware } from '../auth/middleware';
 import colorMap from '../../../the-corpus/colors';
 import { join } from 'path';
 import { readdirSync } from 'fs';
+import { recordDream, metrics } from './metrics';
 
 export const db = drizzle(new Database('db.sqlite'));
 
@@ -99,6 +100,53 @@ export const appRouter = t.router({
     const files = readdirSync(dir);
     return files.filter((f) => f.endsWith('.svg'));
   }),
+
+  logDream: t.procedure
+    .input(
+      z.object({
+        actorId: z.string(),
+        state: z.string(),
+        content: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db.insert(vaultEntries).values({
+        actorId: input.actorId,
+        state: input.state,
+        content: input.content,
+        createdAt: Date.now(),
+      });
+      recordDream(input.state);
+      return { success: true };
+    }),
+
+  replayDreams: t.procedure
+    .input(
+      z.object({
+        actorId: z.string().optional(),
+        start: z.number().optional(),
+        end: z.number().optional(),
+        state: z.string().optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const res: Array<{
+        id: number;
+        actorId: string;
+        state: string;
+        content: string;
+        createdAt: number;
+      }> = await db.select().from(vaultEntries);
+      return res.filter((e) => {
+        if (input.actorId && e.actorId !== input.actorId) return false;
+        if (input.state && e.state !== input.state) return false;
+        if (input.start && e.createdAt < input.start) return false;
+        if (input.end && e.createdAt > input.end) return false;
+        return true;
+      });
+    }),
+
+  getMetrics: t.procedure.query(async () => metrics),
 
   getCorpusMetadata: t.procedure.query(async () => {
     return { colors: colorMap };
