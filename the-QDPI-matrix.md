@@ -11,12 +11,14 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 | **Action**       | 8                  | Read, Index, Prompt, React, Write, Save, Forget, Dream                |
 | **Context**      | 4                  | Page, Prompt/Query, Reaction/Draft, Generation                        |
 | **State/Parity** | 4                  | Public, Private, Sacrifice/Cost, Gift                                 |
-| **Role/Actor**   | 4                  | Human, AI/Character, Whole System, Part/System                        |
+| **Role/Actor**   | 6                  | Human, AI/Character, Guest, Mythic Guardian, Whole System, Part/System |
 | **Relation**     | 2                  | Subject→Object, Object→Subject (initiator/responder)                  |
 | **Polarity**     | 2                  | Internal (“n”, Princhetta) / External (“u”, Cop-E-Right)              |
 | **Rotation**     | 4                  | N, E, S, W (0°, 90°, 180°, 270°)—perspective, sequencing, or “person” |
 
-**8 × 4 × 4 × 4 × 2 × 2 × 4 = 4096**
+The **Guest** role represents a temporary user with minimal persistence. The **Mythic Guardian** serves as a narrative moderator, protecting coherence within the story.
+
+**8 × 4 × 4 × 6 × 2 × 2 × 4 = 6,144**
 
 ---
 
@@ -28,7 +30,7 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 | ---------------- | -------- | ------------ | -------------- | ----------- | ----- | ---- | ------ | ----- |
 | **Context** (4)  | Page     | Prompt/Query | Reaction/Draft | Generation  |       |      |        |       |
 | **State** (4)    | Public   | Private      | Sacrifice      | Gift        |       |      |        |       |
-| **Role** (4)     | Human    | AI           | Whole System   | Part/System |       |      |        |       |
+| **Role** (6)     | Human    | AI           | Guest          | Mythic Guardian | Whole System   | Part/System |       |       |
 | **Relation** (2) | S→O      | O→S          |                |             |       |      |        |       |
 | **Polarity** (2) | Internal | External     |                |             |       |      |        |       |
 | **Rotation** (4) | N        | E            | S              | W           |       |      |        |       |
@@ -86,12 +88,12 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 | **Action**     | 8: Read, Index, Prompt, React, Write, Save, Forget, Dream |
 | **Context**    | 4: Page, Prompt/Query, Reaction/Draft, Generation         |
 | **State**      | 4: Public, Private, Sacrifice/Cost, Gift                  |
-| **Role/Actor** | 4: Human, AI, Whole System, Part/System                   |
+| **Role/Actor** | 6: Human, AI, Guest, Mythic Guardian, Whole System, Part/System |
 | **Relation**   | 2: Subject→Object, Object→Subject                         |
 | **Polarity**   | 2: Internal (“n”/Princhetta), External (“u”/Cop-E-Right)  |
 | **Rotation**   | 4: N, E, S, W (0°, 90°, 180°, 270°)                       |
 
-**8 × 4 × 4 × 4 × 2 × 2 × 4 = 4096**
+**8 × 4 × 4 × 6 × 2 × 2 × 4 = 6,144**
 
 ---
 

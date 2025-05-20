@@ -12,7 +12,7 @@ Every possible interaction, state, and relation in the system is visible, progra
 
 ## II. THE MULTI-AXIS GRAMMAR: DIMENSIONS OF MEANING
 
-**QDPI-4096** is built on a **7-dimensional matrix**—every axis is a “layer” of grammar, a register of agency. Multiply them, and you get 4,096 possible “moves.”
+**QDPI-4096** is built on a **7-dimensional matrix**—every axis is a “layer” of grammar, a register of agency. Multiply them, and you get 6,144 possible “moves.”
 
 ### 1. Actions (8):
 
@@ -32,11 +32,12 @@ Every possible interaction, state, and relation in the system is visible, progra
 
   * “How” the move is situated—who sees it, how it is valued or exchanged, whether it is open or closed, offered or reserved.
 
-### 4. Roles/Actors (4):
+### 4. Roles/Actors (6):
 
-* **Human, AI (Character), Whole System, Part/System**
+* **Human, AI (Character), Guest, Mythic Guardian, Whole System, Part/System**
 
   * Who is acting or being acted upon; who originates or receives; allows full mirroring of user, agent, meta-agent, subsystem.
+  * The **Guest** is a temporary user with minimal persistence. The **Mythic Guardian** acts as a narrative moderator, ensuring coherence and protecting the story world.
 
 ### 5. Relation (2):
 
@@ -72,7 +73,7 @@ Every possible interaction, state, and relation in the system is visible, progra
 
 ### A. Encoding/Decoding
 
-* **4096 symbols = 8 × 4 × 4 × 4 × 2 × 2 × 4**
+* **6,144 symbols = 8 × 4 × 4 × 6 × 2 × 2 × 4**
 
   * Every glyph can be uniquely addressed and decoded as a full “move” or sentence.
 * **Bidirectionality:** All encodings are reversible, time-aware, and stateful.
