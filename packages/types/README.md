@@ -9,3 +9,7 @@ Common TypeScript types and interfaces shared across the Gibsey project.
 - `GetPageByIdParams`, `GetPagesBySectionParams`, `SearchPagesParams` – input shapes for the API procedures.
 - `GetPageByIdResult`, `GetPagesBySectionResult`, `SearchPagesResult` – return types from the API.
 
+
+### Vault Entries
+
+`vault.ts` defines the `VaultEntry` interface representing a logged dream or other QDPI event stored in the database.
