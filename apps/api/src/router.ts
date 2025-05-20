@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { initTRPC } from '@trpc/server';
 import type { Context } from 'hono';
 import { trpcServer } from '@hono/trpc-server';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
@@ -12,12 +11,10 @@ import { authMiddleware } from '../auth/middleware';
 import colorMap from '../../../the-corpus/colors';
 import { join } from 'path';
 import { readdirSync } from 'fs';
-import { recordDream, metrics } from './metrics';
+import { t, AppContext } from './trpc';
+import { requireRole } from './middleware/requireRole';
 
 export const db = drizzle(new Database('db.sqlite'));
-
-export type AppContext = Context & { user: unknown };
-const t = initTRPC.context<AppContext>().create();
 
 const pageSelect = {
   id: pages.id,
@@ -31,9 +28,7 @@ const pageSelect = {
 
 export const appRouter = t.router({
   getPageById: t.procedure
-    .input(
-      z.object({ section: z.number(), index: z.number() })
-    )
+    .input(z.object({ section: z.number(), index: z.number() }))
     .query(async ({ input }) => {
       const result = await db
         .select(pageSelect)
@@ -104,53 +99,44 @@ export const appRouter = t.router({
   logDream: t.procedure
     .input(
       z.object({
-        actorId: z.string(),
+        action: z.string(),
+        context: z.string(),
         state: z.string(),
+        role: z.string(),
+        relation: z.string(),
+        polarity: z.string(),
+        rotation: z.string(),
         content: z.string(),
+        actorId: z.string(),
       })
     )
     .mutation(async ({ input }) => {
       await db.insert(vaultEntries).values({
-        actorId: input.actorId,
+        action: input.action,
+        context: input.context,
         state: input.state,
+        role: input.role,
+        relation: input.relation,
+        polarity: input.polarity,
+        rotation: input.rotation,
         content: input.content,
+        actorId: input.actorId,
         createdAt: Date.now(),
       });
-      recordDream(input.state);
       return { success: true };
     }),
-
-  replayDreams: t.procedure
-    .input(
-      z.object({
-        actorId: z.string().optional(),
-        start: z.number().optional(),
-        end: z.number().optional(),
-        state: z.string().optional(),
-      })
-    )
-    .query(async ({ input }) => {
-      const res: Array<{
-        id: number;
-        actorId: string;
-        state: string;
-        content: string;
-        createdAt: number;
-      }> = await db.select().from(vaultEntries);
-      return res.filter((e) => {
-        if (input.actorId && e.actorId !== input.actorId) return false;
-        if (input.state && e.state !== input.state) return false;
-        if (input.start && e.createdAt < input.start) return false;
-        if (input.end && e.createdAt > input.end) return false;
-        return true;
-      });
-    }),
-
-  getMetrics: t.procedure.query(async () => metrics),
 
   getCorpusMetadata: t.procedure.query(async () => {
     return { colors: colorMap };
   }),
+
+  mergeEntries: t.procedure
+    .use(requireRole(['MythicGuardian']))
+    .input(z.object({ sourceId: z.number(), targetId: z.number() }))
+    .mutation(async () => {
+      // placeholder merge logic; see permissionsMap in packages/types
+      return { success: true };
+    }),
 });
 
 export type AppRouter = typeof appRouter;

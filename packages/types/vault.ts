@@ -1,20 +1,13 @@
 export interface VaultEntry {
   id: number;
-  actorId: string;
+  action: string;
+  context: string;
   state: string;
+  role: string;
+  relation: string;
+  polarity: string;
+  rotation: string;
   content: string;
+  actorId: string;
   createdAt: number;
-}
-
-export interface LogDreamParams {
-  actorId: string;
-  state: string;
-  content: string;
-}
-
-export interface ReplayDreamsParams {
-  actorId?: string;
-  start?: number;
-  end?: number;
-  state?: string;
 }
