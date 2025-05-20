@@ -8,7 +8,7 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 
 | Axis (Dimension) | Options (How Many) | Examples/Notes                                                        |
 | ---------------- | ------------------ | --------------------------------------------------------------------- |
-| **Action**       | 8                  | Read, Index, Prompt, React, Write, Save, Forget, Dream                |
+| **Action**       | 10                 | Read, Index, Link (connect pages/timelines), Prompt, React, Write, Save, Merge (combine Vault artifacts), Forget, Dream |
 | **Context**      | 4                  | Page, Prompt/Query, Reaction/Draft, Generation                        |
 | **State/Parity** | 4                  | Public, Private, Sacrifice/Cost, Gift                                 |
 | **Role/Actor**   | 4                  | Human, AI/Character, Whole System, Part/System                        |
@@ -16,22 +16,25 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 | **Polarity**     | 2                  | Internal (“n”, Princhetta) / External (“u”, Cop-E-Right)              |
 | **Rotation**     | 4                  | N, E, S, W (0°, 90°, 180°, 270°)—perspective, sequencing, or “person” |
 
-**8 × 4 × 4 × 4 × 2 × 2 × 4 = 4096**
+**10 × 4 × 4 × 4 × 2 × 2 × 4 = 10,240**
 
 ---
 
 ## Matrix Slice: From Abstract to Concrete
 
-### 1. Action Layer (8)
+### 1. Action Layer (10)
 
-|                  | Read     | Index        | Prompt         | React       | Write | Save | Forget | Dream |
-| ---------------- | -------- | ------------ | -------------- | ----------- | ----- | ---- | ------ | ----- |
-| **Context** (4)  | Page     | Prompt/Query | Reaction/Draft | Generation  |       |      |        |       |
-| **State** (4)    | Public   | Private      | Sacrifice      | Gift        |       |      |        |       |
-| **Role** (4)     | Human    | AI           | Whole System   | Part/System |       |      |        |       |
-| **Relation** (2) | S→O      | O→S          |                |             |       |      |        |       |
-| **Polarity** (2) | Internal | External     |                |             |       |      |        |       |
-| **Rotation** (4) | N        | E            | S              | W           |       |      |        |       |
+|                  | Read     | Index        | Link           | Prompt      | React | Write | Save | Merge | Forget | Dream |
+| ---------------- | -------- | ------------ | -------------- | ----------- | ----- | ----- | ---- | ----- | ------ | ----- |
+| **Context** (4)  | Page     | Prompt/Query | Reaction/Draft | Generation  |       |      |       |       |       |       |
+| **State** (4)    | Public   | Private      | Sacrifice      | Gift        |       |      |       |       |       |       |
+| **Role** (4)     | Human    | AI           | Whole System   | Part/System |       |      |       |       |       |       |
+| **Relation** (2) | S→O      | O→S          |                |             |       |      |       |       |       |       |
+| **Polarity** (2) | Internal | External     |                |             |       |      |       |       |       |       |
+| **Rotation** (4) | N        | E            | S              | W           |       |      |       |       |       |       |
+
+* **Link** connects pages and timelines, forming explicit navigational paths across the Vault.
+* **Merge** combines artifacts from the Vault or different branches into a single coherent timeline or page.
 
 ---
 
@@ -83,7 +86,7 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 
 | Axes           | Options                                                   |
 | -------------- | --------------------------------------------------------- |
-| **Action**     | 8: Read, Index, Prompt, React, Write, Save, Forget, Dream |
+| **Action**     | 10: Read, Index, Link, Prompt, React, Write, Save, Merge, Forget, Dream |
 | **Context**    | 4: Page, Prompt/Query, Reaction/Draft, Generation         |
 | **State**      | 4: Public, Private, Sacrifice/Cost, Gift                  |
 | **Role/Actor** | 4: Human, AI, Whole System, Part/System                   |
@@ -91,7 +94,7 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 | **Polarity**   | 2: Internal (“n”/Princhetta), External (“u”/Cop-E-Right)  |
 | **Rotation**   | 4: N, E, S, W (0°, 90°, 180°, 270°)                       |
 
-**8 × 4 × 4 × 4 × 2 × 2 × 4 = 4096**
+**10 × 4 × 4 × 4 × 2 × 2 × 4 = 10,240**
 
 ---
 
