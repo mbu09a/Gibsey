@@ -15,7 +15,7 @@ Below is the *generative matrix* for QDPI‑24576—**every “cell” is a uniq
 | **Relation**     | 2                  | Subject→Object, Object→Subject (initiator/responder)                  |
 | **Polarity**     | 2                  | Internal (“n”, Princhetta) / External (“u”, Cop-E-Right)              |
 | **Rotation**     | 4                  | N, E, S, W (0°, 90°, 180°, 270°)—perspective, sequencing, or “person” |
-| **Modality**     | 6                  | Text, Audio, Video, AR, VR, Tactile |
+| **Modality**     | 6                  | Text, Audio, Video, AR, VR, Tactile                                   |
 
 **8 × 4 × 4 × 4 × 2 × 2 × 4 × 6 = 24,576**
 
@@ -25,15 +25,15 @@ Below is the *generative matrix* for QDPI‑24576—**every “cell” is a uniq
 
 ### 1. Action Layer (8)
 
-|                  | Read     | Index        | Prompt         | React       | Write | Save | Forget | Dream |
-| ---------------- | -------- | ------------ | -------------- | ----------- | ----- | ---- | ------ | ----- |
-| **Context** (4)  | Page     | Prompt/Query | Reaction/Draft | Generation  |       |      |        |       |
-| **State** (4)    | Public   | Private      | Sacrifice      | Gift        |       |      |        |       |
-| **Role** (4)     | Human    | AI           | Whole System   | Part/System |       |      |        |       |
-| **Relation** (2) | S→O      | O→S          |                |             |       |      |        |       |
-| **Polarity** (2) | Internal | External     |                |             |       |      |        |       |
-| **Rotation** (4) | N        | E            | S              | W           |       |      |        |       |
-| **Modality** (6) | Text     | Audio        | Video          | AR          | VR          | Tactile |        |       |
+|                  | Read     | Index        | Prompt         | React       | Write | Save    | Forget | Dream |
+| ---------------- | -------- | ------------ | -------------- | ----------- | ----- | ------- | ------ | ----- |
+| **Context** (4)  | Page     | Prompt/Query | Reaction/Draft | Generation  |       |         |        |       |
+| **State** (4)    | Public   | Private      | Sacrifice      | Gift        |       |         |        |       |
+| **Role** (4)     | Human    | AI           | Whole System   | Part/System |       |         |        |       |
+| **Relation** (2) | S→O      | O→S          |                |             |       |         |        |       |
+| **Polarity** (2) | Internal | External     |                |             |       |         |        |       |
+| **Rotation** (4) | N        | E            | S              | W           |       |         |        |       |
+| **Modality** (6) | Text     | Audio        | Video          | AR          | VR    | Tactile |        |       |
 
 ---
 
@@ -68,14 +68,15 @@ Below is the *generative matrix* for QDPI‑24576—**every “cell” is a uniq
 * **Relation:** Subject→Object
 * **Polarity:** External ("u"/Cop-E-Right)
 * **Rotation:** 90° (East)
+* **Modality:** Audio
 
-> **Meaning:** "A human, acting as subject, externally reacts (as Cop-E-Right), drafting a public reply, facing East in the grammar."
+> **Meaning:** "A human, acting as subject, externally reacts (as Cop-E-Right), drafting a public audio reply, facing East in the grammar."
 
 ---
 
 ### 5. Visualization
 
-* Imagine as a **8D hypercube**—each axis a “slider” or “gate.”
+* Imagine as an **8D hypercube**—each axis a “slider” or “gate.”
 * In a UI, “slide” axes or rotate glyph to select action/context/role.
 * Each glyph is **addressable**, **renderable**, and **stateful**.
 
@@ -101,3 +102,4 @@ Below is the *generative matrix* for QDPI‑24576—**every “cell” is a uniq
 **Every cell is a glyph. Every glyph is a move. Every move is a story, an action, a protocol event, a ritual, or a memory.**
 
 **QDPI-24576: The matrix is alive.**
+
