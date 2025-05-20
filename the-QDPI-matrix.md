@@ -15,8 +15,25 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 | **Relation**     | 2                  | Subject→Object, Object→Subject (initiator/responder)                  |
 | **Polarity**     | 2                  | Internal (“n”, Princhetta) / External (“u”, Cop-E-Right)              |
 | **Rotation**     | 4                  | N, E, S, W (0°, 90°, 180°, 270°)—perspective, sequencing, or “person” |
+| **Modality**     | 4                  | Text, Audio, Video, AR |
 
-**8 × 4 × 4 × 4 × 2 × 2 × 4 = 4096**
+**8 × 4 × 4 × 4 × 2 × 2 × 4 × 4 = 16,384 (with Modality)**
+
+---
+
+## Example Glyph Tables with Modality
+
+### Table 1: Dream in Video
+
+| Action | Context | State | Role | Relation | Polarity | Rotation | Modality | Glyph Meaning |
+| ------ | ------- | ----- | ---- | -------- | -------- | -------- | -------- | ------------- |
+| Dream  | Prompt  | Gift  | Whole Sys | O→S | External | S | Video | "The system dreams in response to a prompt, gifting a video to the user." |
+
+### Table 2: First AR Move
+
+| Action | Context | State  | Role  | Relation | Polarity | Rotation | Modality | Glyph Meaning |
+| ------ | ------- | ------ | ----- | -------- | -------- | -------- | -------- | ------------- |
+| Read   | Page    | Public | Human | S→O      | External | E        | AR       | "A user reads an augmented page, the first AR move recorded." |
 
 ---
 
@@ -90,8 +107,9 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 | **Relation**   | 2: Subject→Object, Object→Subject                         |
 | **Polarity**   | 2: Internal (“n”/Princhetta), External (“u”/Cop-E-Right)  |
 | **Rotation**   | 4: N, E, S, W (0°, 90°, 180°, 270°)                       |
+| **Modality**   | 4: Text, Audio, Video, AR                                 |
 
-**8 × 4 × 4 × 4 × 2 × 2 × 4 = 4096**
+**8 × 4 × 4 × 4 × 2 × 2 × 4 × 4 = 16,384 (with Modality)**
 
 ---
 
