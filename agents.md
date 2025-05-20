@@ -212,7 +212,7 @@ tests expect this path during setup.
 ---
 
 ## Need Help?  
-- Check `/README.md` and `/docs/`
+- Check `/README.md`, `/docs/`, and [`docs/role-permissions.md`](docs/role-permissions.md)
 - For environment or deployment issues, see `coolify.yml` and Docker configs.
 - For AI/ML questions, see `/services/ai/README.md`
 - Ask, don’t guess — leave issues or notes for future agents.

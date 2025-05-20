@@ -1,8 +1,25 @@
-# Role Permissions Examples
+# Role Permissions & Example Vault Events
 
-This short document captures sample events for the Vault logging system. Once Vault logging is implemented, these examples can be referenced in test comments.
+This document captures the basic capabilities granted to each user role in the Gibsey platform and provides sample JSON snippets for Vault logging. These serve as reference for documentation and future unit tests.
 
-## Guest reaction example
+---
+
+## Role Permissions Table
+
+| Role            | Allowed Actions                                                |
+| --------------- | -------------------------------------------------------------- |
+| **Guest**       | Read pages, browse symbols, react with emojis                  |
+| **Scribe**      | All Guest actions plus comment on pages and create drafts      |
+| **Contributor** | All Scribe actions plus open pull requests and manage branches |
+| **Guardian**    | Full Contributor rights plus approve merges and manage roles   |
+
+These permissions are intentionally lightweight. More granular capabilities can be layered in the API as the project evolves.
+
+---
+
+## Example Vault Log Snippets
+
+### Guest Reaction Example
 
 ```json
 {
@@ -11,7 +28,7 @@ This short document captures sample events for the Vault logging system. Once Va
 }
 ```
 
-## Mythic Guardian merge approval example
+### Mythic Guardian Merge Approval Example
 
 ```json
 {
@@ -21,4 +38,7 @@ This short document captures sample events for the Vault logging system. Once Va
 }
 ```
 
-These snippets will be referenced by unit tests when Vault logging is built.
+*These snippets will be referenced by unit tests when Vault logging is implemented.*
+
+---
+

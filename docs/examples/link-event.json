@@ -1,0 +1,15 @@
+{
+  "event": "Link",
+  "from": {
+    "section": 1,
+    "pageIndex": 5,
+    "glyph": "0x105A"
+  },
+  "to": {
+    "section": 2,
+    "pageIndex": 3,
+    "glyph": "0x205B"
+  },
+  "timestamp": "2024-01-01T12:00:00Z",
+  "note": "Example link between two pages encoded with glyph values"
+}

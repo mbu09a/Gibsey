@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { trpc } from './trpc';
 import Navigation from './components/Navigation';
 import PageDisplay from './components/PageDisplay';
 import SearchJump from './components/SearchJump';
 import SymbolFilter from './components/SymbolFilter';
 import ColorFilter from './components/ColorFilter';
+import RoleBadge from './components/RoleBadge'; // <-- keep this!
+import { setModality } from './utils/modalityStore'; // <-- keep this!
 
 const App: React.FC = () => {
   const [section, setSection] = useState(1);
   const [index, setIndex] = useState(1);
+  const [modality, setModalityState] = useState('text');
+
+  useEffect(() => {
+    setModality(modality);
+  }, [modality]);
+
   const { data: sections } = trpc.getSections.useQuery();
-  const page = trpc.getPageById.useQuery({ section, index });
+  const page = trpc.getPageById.useQuery(
+    { section, index },
+    { context: { modality } },
+  );
+
+  // Temporary user data until auth is implemented
+  const user = { name: 'Guest', role: 'guest' as const };
 
   const currentColor =
     sections?.find((s) => s.id === section)?.color ?? '#00FF00';
+
+  const handleModalityChange = (m: string) => {
+    setModalityState(m);
+  };
 
   const handleNavigate = (sec: number, idx: number) => {
     setSection(sec);
@@ -22,6 +40,13 @@ const App: React.FC = () => {
 
   return (
     <div className="space-y-4 border p-4" data-testid="app-root" style={{ borderColor: currentColor }}>
+      <header className="flex items-center justify-between mb-4">
+        <h1 className="text-xl">Gibsey</h1>
+        <div className="flex items-center gap-2">
+          <span>{user.name}</span>
+          <RoleBadge role={user.role} />
+        </div>
+      </header>
       <Navigation
         section={section}
         index={index}
@@ -29,7 +54,13 @@ const App: React.FC = () => {
         sections={sections}
         color={currentColor}
       />
-      <PageDisplay section={section} index={index} color={currentColor} />
+      <PageDisplay
+        section={section}
+        index={index}
+        modality={modality}
+        onModalityChange={handleModalityChange}
+        color={currentColor}
+      />
       <SearchJump onSelect={handleNavigate} color={currentColor} />
       <div className="flex gap-4">
         <SymbolFilter color={currentColor} />
