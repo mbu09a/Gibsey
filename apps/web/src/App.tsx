@@ -5,13 +5,14 @@ import PageDisplay from './components/PageDisplay';
 import SearchJump from './components/SearchJump';
 import SymbolFilter from './components/SymbolFilter';
 import ColorFilter from './components/ColorFilter';
-import RoleBadge from './components/RoleBadge'; // <-- keep this!
-import { setModality } from './utils/modalityStore'; // <-- keep this!
+import RoleBadge from './components/RoleBadge';
+import { setModality } from './utils/modalityStore';
 
 const App: React.FC = () => {
   const [section, setSection] = useState(1);
   const [index, setIndex] = useState(1);
   const [modality, setModalityState] = useState('text');
+  const [dreamToast, setDreamToast] = useState(false);
 
   useEffect(() => {
     setModality(modality);
@@ -37,6 +38,14 @@ const App: React.FC = () => {
     setSection(sec);
     setIndex(idx);
   };
+
+  // Dream logging mutation (stub—replace with real Vault logging endpoint if available)
+  const logDream = trpc.logDream?.useMutation?.({
+    onSuccess: () => {
+      setDreamToast(true);
+      setTimeout(() => setDreamToast(false), 2000);
+    },
+  });
 
   return (
     <div className="space-y-4 border p-4" data-testid="app-root" style={{ borderColor: currentColor }}>
@@ -72,7 +81,33 @@ const App: React.FC = () => {
           }}
           color={currentColor}
         />
+        {logDream && (
+          <button
+            onClick={() =>
+              logDream.mutate({
+                action: 'Dream',
+                context: 'ui',
+                state: 'awake',
+                role: 'reader',
+                relation: 'self',
+                polarity: 'neutral',
+                rotation: 'N',
+                content: page.data?.text ?? '',
+                actorId: 'anon',
+              })
+            }
+            className="border px-2 py-1"
+            style={{ borderColor: currentColor }}
+          >
+            Dream
+          </button>
+        )}
       </div>
+      {dreamToast && (
+        <div className="text-terminal-green" data-testid="dream-toast">
+          Dream captured in Vault
+        </div>
+      )}
     </div>
   );
 };

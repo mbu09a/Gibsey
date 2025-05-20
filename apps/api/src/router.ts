@@ -3,7 +3,7 @@ import type { Context } from 'hono';
 import { trpcServer } from '@hono/trpc-server';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
-import { pages, sections } from '../../../packages/db/src/schema';
+import { pages, sections, vaultEntries } from '../../../packages/db/src/schema';
 import { symbolMetadata } from '../../../the-corpus/symbols/metadata';
 import { eq, and, like } from 'drizzle-orm';
 import { z } from 'zod';
@@ -97,6 +97,36 @@ export const appRouter = t.router({
     const files = readdirSync(dir);
     return files.filter((f) => f.endsWith('.svg'));
   }),
+
+  logDream: t.procedure
+    .input(
+      z.object({
+        action: z.string(),
+        context: z.string(),
+        state: z.string(),
+        role: z.string(),
+        relation: z.string(),
+        polarity: z.string(),
+        rotation: z.string(),
+        content: z.string(),
+        actorId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db.insert(vaultEntries).values({
+        action: input.action,
+        context: input.context,
+        state: input.state,
+        role: input.role,
+        relation: input.relation,
+        polarity: input.polarity,
+        rotation: input.rotation,
+        content: input.content,
+        actorId: input.actorId,
+        createdAt: Date.now(),
+      });
+      return { success: true };
+    }),
 
   getCorpusMetadata: t.procedure.query(async () => {
     return { colors: colorMap };
