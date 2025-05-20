@@ -9,3 +9,8 @@ Common TypeScript types and interfaces shared across the Gibsey project.
 - `GetPageByIdParams`, `GetPagesBySectionParams`, `SearchPagesParams` – input shapes for the API procedures.
 - `GetPageByIdResult`, `GetPagesBySectionResult`, `SearchPagesResult` – return types from the API.
 
+
+### Modality
+
+`modality.ts` defines the `Modality` enum, representing the various forms a narrative element can take:
+`Text`, `Audio`, `Video`, `AR`, `VR`, and `Tactile`. Use it when describing or filtering content by medium.
