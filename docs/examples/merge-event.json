@@ -1,0 +1,23 @@
+{
+  "event": "Merge",
+  "targetPage": {
+    "section": 1,
+    "pageIndex": 5,
+    "glyph": "0x30AF"
+  },
+  "contributors": [
+    {
+      "user": "alice",
+      "contributionId": "abc123",
+      "glyph": "0x00A1"
+    },
+    {
+      "user": "bob",
+      "contributionId": "def456",
+      "glyph": "0x00B2"
+    }
+  ],
+  "resultGlyph": "0x30FF",
+  "timestamp": "2024-01-02T15:30:00Z",
+  "note": "User contributions merged into page with resulting glyph encoding"
+}
