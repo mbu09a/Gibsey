@@ -95,6 +95,13 @@ Below is the *generative matrix* for QDPI‑4096—**every “cell” is a uniqu
 
 ---
 
+## Guests & Mythic Guardians
+
+* **Mythic Guardians** oversee merges and major protocol rituals. They review glyph flows and grant final approval before a branch joins the living matrix.
+* **Guests** participate only ephemerally. They may read, prompt, or dream but cannot make lasting changes without a Guardian's blessing.
+
+---
+
 **Every cell is a glyph. Every glyph is a move. Every move is a story, an action, a protocol event, a ritual, or a memory.**
 
 **QDPI-4096: The matrix is alive.**
