@@ -13,12 +13,22 @@ vi.mock('drizzle-orm/bun-sqlite', () => ({ drizzle: () => ({}) }));
 vi.mock('bun:sqlite', () => ({ Database: class {} }));
 vi.mock('drizzle-orm/sqlite-core', () => ({
   sqliteTable: () => ({}),
-  integer: () => ({ primaryKey: () => ({}) }),
+  integer: () => ({
+    primaryKey: () => ({}),
+    references: () => ({ notNull: () => ({}) }),
+    notNull: () => ({ unique: () => ({}) }),
+    unique: () => ({})
+  }),
   text: () => ({ notNull: () => ({}) })
 }));
 vi.mock('../../../packages/db/src/schema', () => ({ pages: {}, sections: {} }));
 vi.mock('@trpc/server', () => ({ initTRPC: () => ({ context: () => ({ create: () => ({ router: (obj: any) => obj }) }) }) }));
-vi.mock('drizzle-orm', () => ({ eq: () => ({}), and: () => ({}), like: () => ({}) }));
+vi.mock('drizzle-orm', () => ({
+  eq: () => ({}),
+  and: () => ({}),
+  like: () => ({}),
+  relations: () => ({})
+}));
 vi.mock('../../../apps/api/auth/middleware', () => ({ authMiddleware: () => {} }));
 
 // Mock BOTH possible symbol and schema imports for router dependencies
