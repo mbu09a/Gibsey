@@ -11,7 +11,7 @@ Common TypeScript types and interfaces shared across the Gibsey project.
 
 ### Vault Entries
 
-`vault.ts` defines the `VaultEntry` interface representing a logged dream or other QDPI event stored in the database.
+`vault.ts` defines the `VaultEntry` interface representing a logged dream or other QDPI event stored in the database. Every Vault entry captures all QDPI axes: action, context, state, role, relation, polarity, rotation, content, actorId, and createdAt.
 
 ### Modality
 

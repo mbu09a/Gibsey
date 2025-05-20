@@ -28,9 +28,7 @@ const pageSelect = {
 
 export const appRouter = t.router({
   getPageById: t.procedure
-    .input(
-      z.object({ section: z.number(), index: z.number() })
-    )
+    .input(z.object({ section: z.number(), index: z.number() }))
     .query(async ({ input }) => {
       const result = await db
         .select(pageSelect)
