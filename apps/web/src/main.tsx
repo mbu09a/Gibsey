@@ -3,11 +3,19 @@ import ReactDOM from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { trpc } from './trpc';
 import { httpBatchLink } from '@trpc/client';
+import { getModality } from './utils/modalityStore';
 import './index.css';
 import App from './App';
 
 const client = trpc.createClient({
-  links: [httpBatchLink({ url: '/trpc' })],
+  links: [
+    httpBatchLink({
+      url: '/trpc',
+      headers: ({ op }) => ({
+        'x-modality': op.context?.modality ?? getModality(),
+      }),
+    }),
+  ],
 });
 
 const queryClient = new QueryClient();
