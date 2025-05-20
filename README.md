@@ -170,3 +170,8 @@ newer), and **Python 3** installed.
 Run the TypeScript unit tests with `bun test`. Python tests are executed with `pytest`.
 
 ---
+
+## Roles and Permissions
+
+See [docs/role-permissions.md](docs/role-permissions.md) for allowed actions of Guests, Scribes, Contributors, and Guardians.
+
