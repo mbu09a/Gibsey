@@ -1,5 +1,4 @@
 import { Hono } from 'hono';
-import { initTRPC } from '@trpc/server';
 import type { Context } from 'hono';
 import { trpcServer } from '@hono/trpc-server';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
@@ -12,11 +11,10 @@ import { authMiddleware } from '../auth/middleware';
 import colorMap from '../../../the-corpus/colors';
 import { join } from 'path';
 import { readdirSync } from 'fs';
+import { t, AppContext } from './trpc';
+import { requireRole } from './middleware/requireRole';
 
 export const db = drizzle(new Database('db.sqlite'));
-
-export type AppContext = Context & { user: unknown };
-const t = initTRPC.context<AppContext>().create();
 
 const pageSelect = {
   id: pages.id,
@@ -133,6 +131,14 @@ export const appRouter = t.router({
   getCorpusMetadata: t.procedure.query(async () => {
     return { colors: colorMap };
   }),
+
+  mergeEntries: t.procedure
+    .use(requireRole(['MythicGuardian']))
+    .input(z.object({ sourceId: z.number(), targetId: z.number() }))
+    .mutation(async () => {
+      // placeholder merge logic; see permissionsMap in packages/types
+      return { success: true };
+    }),
 });
 
 export type AppRouter = typeof appRouter;

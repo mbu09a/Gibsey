@@ -9,7 +9,11 @@ Common TypeScript types and interfaces shared across the Gibsey project.
 - `GetPageByIdParams`, `GetPagesBySectionParams`, `SearchPagesParams` – input shapes for the API procedures.
 - `GetPageByIdResult`, `GetPagesBySectionResult`, `SearchPagesResult` – return types from the API.
 
-
 ### Vault Entries
 
 `vault.ts` defines the `VaultEntry` interface representing a logged dream or other QDPI event stored in the database.
+
+### Modality
+
+`modality.ts` defines the `Modality` enum, representing the various forms a narrative element can take:
+`Text`, `Audio`, `Video`, `AR`, `VR`, and `Tactile`. Use it when describing or filtering content by medium.
