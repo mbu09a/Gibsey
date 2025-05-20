@@ -16,8 +16,12 @@ vi.mock('drizzle-orm/sqlite-core', () => ({
   integer: () => ({ primaryKey: () => ({}) }),
   text: () => ({ notNull: () => ({}) })
 }));
-vi.mock('../../../packages/db/src/schema', () => ({ pages: {}, sections: {} }));
-vi.mock('/workspace/gibsey/packages/db/src/schema', () => ({ pages: {}, sections: {} }));
+// Unified schema mocks (covering all possible import paths)
+vi.mock('../../../packages/db/src/schema', () => ({ pages: {}, sections: {}, vaultEntries: {} }));
+vi.mock('/workspace/gibsey/packages/db/src/schema', () => ({ pages: {}, sections: {}, vaultEntries: {} }));
+vi.mock('../../../packages/db/src/schema.ts', () => ({ pages: {}, sections: {}, vaultEntries: {} }));
+vi.mock('/workspace/gibsey/packages/db/src/schema.ts', () => ({ pages: {}, sections: {}, vaultEntries: {} }));
+
 vi.mock('@trpc/server', () => ({ initTRPC: () => ({ context: () => ({ create: () => ({ router: (obj: any) => obj }) }) }) }));
 vi.mock('drizzle-orm', () => ({ eq: () => ({}), and: () => ({}), like: () => ({}) }));
 vi.mock('../../../apps/api/auth/middleware', () => ({ authMiddleware: () => {} }));
@@ -26,8 +30,6 @@ vi.mock('../../../apps/api/auth/middleware', () => ({ authMiddleware: () => {} }
 vi.mock('../../../the-corpus/symbols/metadata', () => ({
   symbolMetadata: [{ character: 'Test', filename: 'a.svg', color: '#fff', orientation: 'upright' }],
 }));
-vi.mock('../../../packages/db/src/schema.ts', () => ({ pages: {}, sections: {} }));
-vi.mock('/workspace/gibsey/packages/db/src/schema.ts', () => ({ pages: {}, sections: {} }));
 
 let router: typeof import('../../../apps/api/src/router');
 beforeAll(async () => {

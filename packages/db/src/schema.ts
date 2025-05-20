@@ -17,6 +17,20 @@ export const pages = sqliteTable('pages', {
   text: text('text').notNull(),
 });
 
+export const vaultEntries = sqliteTable('vault_entries', {
+  id: integer('id').primaryKey(),
+  action: text('action').notNull(),
+  context: text('context').notNull(),
+  state: text('state').notNull(),
+  role: text('role').notNull(),
+  relation: text('relation').notNull(),
+  polarity: text('polarity').notNull(),
+  rotation: text('rotation').notNull(),
+  content: text('content').notNull(),
+  actorId: text('actor_id').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+});
+
 export const sectionRelations = relations(sections, ({ many }) => ({
   pages: many(pages),
 }));
