@@ -9,6 +9,10 @@ Common TypeScript types and interfaces shared across the Gibsey project.
 - `GetPageByIdParams`, `GetPagesBySectionParams`, `SearchPagesParams` – input shapes for the API procedures.
 - `GetPageByIdResult`, `GetPagesBySectionResult`, `SearchPagesResult` – return types from the API.
 
+### Gate Messages
+
+`gate.ts` defines the `GateMessage` interface for Mycelial Narrative Relay communications. It includes all QDPI axes along with cross‑world metadata (`fromWorld`, `toWorld`, `payload`, and `orientation`).
+
 ### Vault Entries
 
 `vault.ts` defines the `VaultEntry` interface representing a logged dream or other QDPI event stored in the database. Every Vault entry captures all QDPI axes: action, context, state, role, relation, polarity, rotation, content, actorId, and createdAt.

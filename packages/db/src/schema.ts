@@ -41,3 +41,12 @@ export const pageRelations = relations(pages, ({ one }) => ({
     references: [sections.id],
   }),
 }));
+export const vaultEntries = sqliteTable('vault_entries', {
+  id: integer('id').primaryKey(),
+  messageId: text('message_id').notNull().unique(),
+  context: text('context').notNull(),
+  fromWorld: text('from_world').notNull(),
+  toWorld: text('to_world').notNull(),
+  payload: text('payload').notNull(),
+  orientation: text('orientation').notNull(),
+});
