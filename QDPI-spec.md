@@ -1,10 +1,10 @@
-# QDPI‑4096: The Living Grammar—Final Spec Overview
+# QDPI‑24576: The Living Grammar—Final Spec Overview
 
 ---
 
 ## I. SYSTEM PHILOSOPHY: FROM PROTOCOL TO VISUAL LANGUAGE
 
-QDPI‑4096 is not a database, a ledger, or a simple encoding scheme.
+QDPI‑24576 is not a database, a ledger, or a simple encoding scheme.
 It is a **living visual grammar** for agency, computation, memory, and narrative.
 Every possible interaction, state, and relation in the system is visible, programmable, and symbolic—*addressable not just by code, but by glyph and story*.
 
@@ -12,7 +12,7 @@ Every possible interaction, state, and relation in the system is visible, progra
 
 ## II. THE MULTI-AXIS GRAMMAR: DIMENSIONS OF MEANING
 
-**QDPI-4096** is built on a **7-dimensional matrix**—every axis is a “layer” of grammar, a register of agency. Multiply them, and you get 4,096 possible “moves.”
+**QDPI-24576** is built on a **8-dimensional matrix**—every axis is a “layer” of grammar, a register of agency. Multiply them, and you get 24,576 possible “moves.”
 
 ### 1. Actions (8):
 
@@ -56,6 +56,12 @@ Every possible interaction, state, and relation in the system is visible, progra
 
   * Each glyph rotates to encode “person,” perspective, or sequencing. The transition from one orientation to another (CW/CCW, forward/backward) encodes *directionality and temporality*.
 
+### 8. Modality (6):
+
+* **Text, Audio, Video, AR, VR, Tactile**
+
+  * Which sensory channel the glyph or move expresses—written words, spoken sound, moving image, augmented or virtual reality, or physical feedback.
+
 ---
 
 ## III. THE GLYPH ENGINE: HOW MEANING IS ENCODED
@@ -72,7 +78,7 @@ Every possible interaction, state, and relation in the system is visible, progra
 
 ### A. Encoding/Decoding
 
-* **4096 symbols = 8 × 4 × 4 × 4 × 2 × 2 × 4**
+* **24,576 symbols = 8 × 4 × 4 × 4 × 2 × 2 × 4 × 6**
 
   * Every glyph can be uniquely addressed and decoded as a full “move” or sentence.
 * **Bidirectionality:** All encodings are reversible, time-aware, and stateful.
@@ -111,7 +117,7 @@ Every possible interaction, state, and relation in the system is visible, progra
 
 * **Narrative:** Every page, act, memory, or dream is a sequence of glyphs—a visible, legible, replayable “story.”
 * **Agentic AI:** Each AI or agent “plays” the grammar—its agency, memory, and personality is encoded in the glyphic moves it makes.
-* **Protocol/OS:** QDPI-4096 is not just a codec—it’s a programmable, recursive, symbolic operating system for all action, meaning, and communication in the mesh.
+* **Protocol/OS:** QDPI-24576 is not just a codec—it’s a programmable, recursive, symbolic operating system for all action, meaning, and communication in the mesh.
 
 ---
 
@@ -125,7 +131,7 @@ Every possible interaction, state, and relation in the system is visible, progra
 
 ## VIII. IN SUMMARY
 
-QDPI-4096 is the **matrix-protein of symbolic agency**—the living, programmable grammar for every move, memory, gift, and dream in a world.
+QDPI-24576 is the **matrix-protein of symbolic agency**—the living, programmable grammar for every move, memory, gift, and dream in a world.
 **It is not just code, not just a book, not just a protocol.**
 **It is the seed and syntax of a civilization.**
 
