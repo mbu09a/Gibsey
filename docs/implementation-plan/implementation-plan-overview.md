@@ -38,6 +38,7 @@ This file summarizes the staged implementation plan for building Gibsey’s nine
 **Tasks:**
 
 * Define QDPI schema/protocol (including user/agent roles).
+* Introduce role tiers: **Mythic Guardians** to oversee merges and **Guests** for ephemeral interactions.
 * Build initial API endpoints/message handlers for QDPI actions.
 * Wire into Entrance Way, Corpus, and Vault for recursion test.
 * Document for agents and plugins in AGENTS.md.
