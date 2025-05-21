@@ -26,12 +26,9 @@ Below is the *generative matrix* for QDPI‑92,160—**every “cell” is a uni
 
 ---
 
-## Sample Glyph Visualization (Placeholder)
+## Sample Glyph Visualization
 
-*(Consider inserting a visual diagram or image of a sample glyph here. For example, a Princhetta/Cop-E-Right variant with the gates highlighted to illustrate the visual encoding.)*
-
-**Example Markdown for an image (you would replace this with your actual image path):**
-`![Sample Glyph](path_to_your_glyph_image.png "Sample QDPI Glyph")`
+![QDPI Hypercube](docs/qdpi-hypercube.svg "QDPI‑92,160 Hypercube")
 
 ---
 
