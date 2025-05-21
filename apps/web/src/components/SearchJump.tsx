@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
 import { trpc } from '../utils/trpc';
+import {
+  Action,
+  Context as GlyphContext,
+  State,
+  Role,
+  Relation,
+  Polarity,
+  Rotation,
+  Modality,
+  Glyph,
+} from '../../../packages/utils/glyphCodec';
 
 export interface SearchJumpProps {
   onSelect: (section: number, index: number) => void;
@@ -12,8 +23,27 @@ const SearchJump: React.FC<SearchJumpProps> = ({ onSelect, color = '#00FF00' }) 
   const [jumpPage, setJumpPage] = useState(1);
 
   const search = trpc.searchPages.useQuery({ query }, { enabled: false });
+  const logMoveMutation = trpc.logQdpiMove.useMutation();
 
-  const handleSearch = () => search.refetch();
+  const handleSearch = () => {
+    if (query.trim()) {
+      const glyphData: Glyph = {
+        action: Action.Prompt,
+        context: GlyphContext.Prompt,
+        state: State.Public,
+        role: Role.Human,
+        relation: Relation.S2O,
+        polarity: Polarity.External,
+        rotation: Rotation.N,
+        modality: Modality.Text,
+      };
+      logMoveMutation.mutate({
+        ...glyphData,
+        operationDetails: `Performed search with query: '${query}'`,
+      });
+    }
+    search.refetch();
+  };
   const handleJump = () => onSelect(jumpSection, jumpPage);
 
   return (

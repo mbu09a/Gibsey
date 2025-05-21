@@ -1,10 +1,12 @@
 export enum Action {
   Read = 0,
   Index,
+  Link,
   Prompt,
   React,
   Write,
   Save,
+  Merge,
   Forget,
   Dream,
 }
@@ -25,7 +27,9 @@ export enum State {
 
 export enum Role {
   Human = 0,
-  AI,
+  AICharacter,
+  Guest, // Temporary user with minimal persistence.
+  MythicGuardian, // Narrative moderator, oversees merges and major protocol rituals.
   WholeSystem,
   PartSystem,
 }
@@ -107,33 +111,33 @@ export function decodeGlyphString(code: string): Glyph {
 export function encodeGlyphNumeric(g: Glyph): number {
   const m = g.modality ?? Modality.Text;
   return (
-    (m << 13) |                 // 3 bits for modality (up to 8 values)
-    (g.action << 10) |          // 3 bits (up to 8)
-    (g.context << 8) |          // 2 bits (up to 4)
-    (g.state << 6) |            // 2 bits (up to 4)
-    (g.role << 4) |             // 2 bits (up to 4)
-    (g.relation << 3) |         // 1 bit (2)
-    (g.polarity << 2) |         // 1 bit (2)
-    (g.rotation)                // 2 bits (up to 4)
+    (m << 15) |          // Modality: 3 bits (up to 8 values)
+    (g.action << 11) |   // Action: 4 bits (up to 16 values)
+    (g.context << 9) |   // Context: 2 bits (up to 4 values)
+    (g.state << 7) |     // State: 2 bits (up to 4 values)
+    (g.role << 4) |      // Role: 3 bits (up to 8 values)
+    (g.relation << 3) |  // Relation: 1 bit (up to 2 values)
+    (g.polarity << 2) |  // Polarity: 1 bit (up to 2 values)
+    (g.rotation)         // Rotation: 2 bits (up to 4 values)
   );
 }
 
 export function decodeGlyphNumeric(code: number): Glyph {
-  const rotation = code & 0b11;
+  const rotation = code & 0b11;          // 2 bits
   code >>= 2;
-  const polarity = code & 0b1;
+  const polarity = code & 0b1;           // 1 bit
   code >>= 1;
-  const relation = code & 0b1;
+  const relation = code & 0b1;           // 1 bit
   code >>= 1;
-  const role = code & 0b11;
-  code >>= 2;
-  const state = code & 0b11;
-  code >>= 2;
-  const context = code & 0b11;
-  code >>= 2;
-  const action = code & 0b111;
+  const role = code & 0b111;             // 3 bits
   code >>= 3;
-  const modality = code & 0b111; // 3 bits for up to 8 modalities
+  const state = code & 0b11;             // 2 bits
+  code >>= 2;
+  const context = code & 0b11;           // 2 bits
+  code >>= 2;
+  const action = code & 0b1111;          // 4 bits
+  code >>= 4;
+  const modality = code & 0b111;         // 3 bits
   return {
     action: action as Action,
     context: context as Context,
