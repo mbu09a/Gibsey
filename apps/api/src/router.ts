@@ -5,7 +5,7 @@ import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
 import { pages, sections, qdpiMoves, pageNotes, vaultEntries } from '../../../packages/db/src/schema';
 import { symbolMetadata } from '../../../the-corpus/symbols/metadata';
-import { eq, and, like } from 'drizzle-orm';
+import { eq, and, like, desc, gte, lte } from 'drizzle-orm';
 import { z } from 'zod';
 import { authMiddleware } from '../auth/middleware';
 import colorMap from '../../../the-corpus/colors';
@@ -24,7 +24,10 @@ import {
 import { join } from 'path';
 import { readdirSync } from 'fs';
 import { t, AppContext } from './trpc';
+import { TRPCError } from '@trpc/server'; // Explicit import for TRPCError
 import { requireRole } from './middleware/requireRole';
+import { roleCapabilities, RoleType } from '../../../packages/types/roles';
+import { qdpiActionCapabilities } from '../../../packages/types/actionPermissions';
 
 export const db = drizzle(new Database('db.sqlite'));
 
@@ -106,7 +109,32 @@ export const appRouter = t.router({
         operationDetails: z.string().optional(),
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx }) => { // Added ctx for user role
+      // Permission Check Logic
+      const userRole = ctx.user?.role as RoleType | undefined;
+
+      if (!userRole || !roleCapabilities[userRole]) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'User role is invalid or not found.',
+        });
+      }
+
+      const actionName = Action[input.action] as keyof typeof Action; // Action is already imported
+      const requiredCapability = qdpiActionCapabilities[actionName];
+
+      if (requiredCapability) {
+        const userCapabilities = roleCapabilities[userRole]; // userRole is validated above
+        if (!userCapabilities.includes(requiredCapability)) {
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: `Your role ('${userRole}') does not have the required capability ('${requiredCapability}') to perform the action '${actionName}'.`,
+          });
+        }
+      }
+      // If requiredCapability is undefined, the action is allowed by default.
+
+      // Existing logic
       const modality = input.modality ?? Modality.Text;
       const glyphData: Glyph = {
         action: input.action,
@@ -240,6 +268,97 @@ export const appRouter = t.router({
   getCorpusMetadata: t.procedure.query(async () => {
     return { colors: colorMap };
   }),
+
+  getQdpiMoveById: t.procedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      const result = await db
+        .select()
+        .from(qdpiMoves)
+        .where(eq(qdpiMoves.id, input.id));
+      return result[0] || null;
+    }),
+
+  getQdpiMovesByNumericGlyph: t.procedure
+    .input(z.object({ numericGlyph: z.number() }))
+    .query(async ({ input }) => {
+      return db
+        .select()
+        .from(qdpiMoves)
+        .where(eq(qdpiMoves.numericGlyph, input.numericGlyph))
+        .orderBy(desc(qdpiMoves.timestamp));
+    }),
+
+  getQdpiMoves: t.procedure
+    .input(
+      z.object({
+        filter: z
+          .object({
+            action: z.nativeEnum(Action).optional(),
+            context: z.nativeEnum(GlyphContext).optional(),
+            state: z.nativeEnum(State).optional(),
+            role: z.nativeEnum(Role).optional(),
+            relation: z.nativeEnum(Relation).optional(),
+            polarity: z.nativeEnum(Polarity).optional(),
+            rotation: z.nativeEnum(Rotation).optional(),
+            modality: z.nativeEnum(Modality).optional(),
+            userId: z.string().optional(),
+            startDate: z.number().int().positive().optional(),
+            endDate: z.number().int().positive().optional(),
+          })
+          .optional(),
+        limit: z.number().int().positive().optional().default(50),
+        offset: z.number().int().nonnegative().optional().default(0),
+      })
+    )
+    .query(async ({ input }) => {
+      const conditions = [];
+      if (input.filter) {
+        if (input.filter.action !== undefined) {
+          conditions.push(eq(qdpiMoves.action, input.filter.action));
+        }
+        if (input.filter.context !== undefined) {
+          conditions.push(eq(qdpiMoves.context, input.filter.context));
+        }
+        if (input.filter.state !== undefined) {
+          conditions.push(eq(qdpiMoves.state, input.filter.state));
+        }
+        if (input.filter.role !== undefined) {
+          conditions.push(eq(qdpiMoves.role, input.filter.role));
+        }
+        if (input.filter.relation !== undefined) {
+          conditions.push(eq(qdpiMoves.relation, input.filter.relation));
+        }
+        if (input.filter.polarity !== undefined) {
+          conditions.push(eq(qdpiMoves.polarity, input.filter.polarity));
+        }
+        if (input.filter.rotation !== undefined) {
+          conditions.push(eq(qdpiMoves.rotation, input.filter.rotation));
+        }
+        if (input.filter.modality !== undefined) {
+          conditions.push(eq(qdpiMoves.modality, input.filter.modality));
+        }
+        if (input.filter.userId !== undefined) {
+          conditions.push(eq(qdpiMoves.userId, input.filter.userId));
+        }
+        if (input.filter.startDate !== undefined) {
+          conditions.push(gte(qdpiMoves.timestamp, new Date(input.filter.startDate)));
+        }
+        if (input.filter.endDate !== undefined) {
+          conditions.push(lte(qdpiMoves.timestamp, new Date(input.filter.endDate)));
+        }
+      }
+
+      const query = db
+        .select()
+        .from(qdpiMoves)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(desc(qdpiMoves.timestamp))
+        .limit(input.limit)
+        .offset(input.offset);
+
+      return query;
+    }),
 
   mergeEntries: t.procedure
     .use(requireRole(['MythicGuardian']))

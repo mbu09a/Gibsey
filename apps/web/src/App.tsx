@@ -18,6 +18,7 @@ import SymbolFilter from './components/SymbolFilter';
 import ColorFilter from './components/ColorFilter';
 import RoleBadge from './components/RoleBadge';
 import { setModality } from './utils/modalityStore';
+import { RoleProvider } from './contexts/RoleContext';
 
 const App: React.FC = () => {
   const [section, setSection] = useState(1);
@@ -64,7 +65,8 @@ const App: React.FC = () => {
   }, [page.data, section, index, modality]);
 
   // Temporary user data until auth is implemented
-  const user = { name: 'Guest', role: 'guest' as const };
+  // This will be superseded by RoleContext for role, but name can remain.
+  const user = { name: 'Guest' }; 
 
   const currentColor =
     sections?.find((s) => s.id === section)?.color ?? '#00FF00';
@@ -87,12 +89,18 @@ const App: React.FC = () => {
   });
 
   return (
-    <div className="space-y-4 border p-4" data-testid="app-root" style={{ borderColor: currentColor }}>
-      <header className="flex items-center justify-between mb-4">
-        <h1 className="text-xl">Gibsey</h1>
-        <div className="flex items-center gap-2">
-          <span>{user.name}</span>
-          <RoleBadge role={user.role} />
+    <RoleProvider>
+      <div className="space-y-4 border p-4" data-testid="app-root" style={{ borderColor: currentColor }}>
+        <header className="flex items-center justify-between mb-4">
+          <h1 className="text-xl">Gibsey</h1>
+          {/* RoleBadge will now be in Navigation and use RoleContext */}
+          <div className="flex items-center gap-2">
+             <span>{user.name}</span>
+             {/* The RoleBadge here was using a local user.role, it will be removed as Navigation will handle it */}
+          </div>
+        </header>
+        <Navigation
+        {/* The RoleBadge here was using a local user.role, it will be removed as Navigation will handle it */}
         </div>
       </header>
       <Navigation
@@ -149,6 +157,7 @@ const App: React.FC = () => {
         </div>
       )}
     </div>
+  </RoleProvider>
   );
 };
 

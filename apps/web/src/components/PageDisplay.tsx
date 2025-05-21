@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import { trpc } from '../utils/trpc';
 import ModalitySelector from './ModalitySelector';
 import type { Page } from '../../../packages/types/entrance-way';
+import { useRole } from '../contexts/RoleContext';
+import { GlyphContext } from '../../../packages/utils/glyphCodec';
+import {
+  createWriteEventInput,
+  createPromptEventInput,
+  createLinkEventInput,
+  createMergeEventInput,
+  createDreamEventInput,
+} from '../../../packages/qdpi'; // Adjust path if necessary, assuming it's in packages/qdpi/index.ts
 
 export interface PageDisplayProps {
   section?: number;
@@ -23,7 +32,10 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
   currentPageId,
 }) => {
   const [noteText, setNoteText] = useState('');
+  // savePageNote mutation is already imported by the original code.
   const saveNoteMutation = trpc.savePageNote.useMutation();
+  const logQdpiMoveMutation = trpc.logQdpiMove.useMutation();
+  const { currentRole } = useRole();
 
   // If page is not provided, fetch from API
   const { data, isLoading } = (!page && section && index)
@@ -53,12 +65,46 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
         onSuccess: (data) => {
           alert(`Note saved successfully! Note ID: ${data.newNoteId}`);
           setNoteText(''); // Clear the textarea
+
+          // Log QDPI Write action
+          const qdpiInput = createWriteEventInput(
+            currentRole,
+            GlyphContext.Reaction, // Assuming note is a reaction to page content
+            {
+              operationDetails: JSON.stringify({
+                noteRelatedToPageId: currentPageId,
+                newNoteId: data.newNoteId,
+              }),
+              userId: 'temp-user-id', // Placeholder user ID
+            }
+          );
+          logQdpiMoveMutation.mutate(qdpiInput, {
+            onSuccess: () => console.log('QDPI Write action logged for savePageNote'),
+            onError: (err) => console.error('Failed to log QDPI Write action', err),
+          });
         },
         onError: (error) => {
           alert(`Error saving note: ${error.message}`);
         },
       }
     );
+  };
+
+  const handleGenericQdpiAction = (
+    actionType: string,
+    qdpiInputCreator: () => Parameters<typeof logQdpiMoveMutation.mutate>[0] 
+  ) => {
+    const qdpiInput = qdpiInputCreator();
+    logQdpiMoveMutation.mutate(qdpiInput, {
+      onSuccess: () => {
+        console.log(`QDPI ${actionType} action logged successfully.`);
+        alert(`${actionType} action logged (see console for details).`);
+      },
+      onError: (err) => {
+        console.error(`Failed to log QDPI ${actionType} action`, err);
+        alert(`Error logging ${actionType} action: ${err.message}`);
+      },
+    });
   };
 
   if (isLoading) {
@@ -123,26 +169,58 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
         </div>
       )}
 
-      {/* Placeholder for Action.Link and Action.Merge */}
-      {currentPageId && ( // Only show if there's a page context
+      {/* QDPI Action Buttons */}
+      {currentPageId && (
         <div className="mt-4 pt-4 border-t" style={{ borderColor: color }}>
-          <h3 className="text-lg mb-2">Future Actions</h3>
-          <div className="flex space-x-2">
-            {/* Action.Link: Connects pages or timelines. */}
+          <h3 className="text-lg mb-2">QDPI Actions</h3>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <button
-              onClick={() => console.log('TODO: Implement Link Action UI and log QDPI move for Action.Link')}
-              className="border px-2 py-1"
-              style={{ borderColor: color }}
+              onClick={() => handleGenericQdpiAction(
+                'Prompt',
+                () => createPromptEventInput(currentRole, GlyphContext.Page, {
+                  operationDetails: JSON.stringify({ promptedOnPageId: currentPageId }),
+                  userId: 'temp-user-id',
+                })
+              )}
+              className="border px-2 py-1" style={{ borderColor: color }}
             >
-              Link Page
+              Submit Prompt
             </button>
-            {/* Action.Merge: Combines Vault artifacts, folding multiple drafts or branches. */}
             <button
-              onClick={() => console.log('TODO: Implement Merge Action UI and log QDPI move for Action.Merge')}
-              className="border px-2 py-1"
-              style={{ borderColor: color }}
+              onClick={() => handleGenericQdpiAction(
+                'Link',
+                () => createLinkEventInput(currentRole, GlyphContext.Page, {
+                  operationDetails: JSON.stringify({ linkFromPageId: currentPageId, linkToPageId: 'PLACEHOLDER_TARGET_ID' }),
+                  userId: 'temp-user-id',
+                })
+              )}
+              className="border px-2 py-1" style={{ borderColor: color }}
             >
-              Merge Artifacts
+              Create Link
+            </button>
+            <button
+              onClick={() => handleGenericQdpiAction(
+                'Merge',
+                () => createMergeEventInput(currentRole, GlyphContext.Page, {
+                  operationDetails: JSON.stringify({ mergeOnPageId: currentPageId }),
+                  userId: 'temp-user-id',
+                })
+              )}
+              className="border px-2 py-1" style={{ borderColor: color }}
+            >
+              Request Merge
+            </button>
+            <button
+              onClick={() => handleGenericQdpiAction(
+                'Dream',
+                () => createDreamEventInput(currentRole, GlyphContext.Page, {
+                  operationDetails: JSON.stringify({ dreamOnPageId: currentPageId }),
+                  userId: 'temp-user-id',
+                })
+              )}
+              className="border px-2 py-1" style={{ borderColor: color }}
+            >
+              Initiate Dream
             </button>
           </div>
         </div>
