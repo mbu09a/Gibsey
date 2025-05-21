@@ -1,10 +1,9 @@
 import { Hono } from 'hono';
-import { initTRPC } from '@trpc/server';
 import type { Context } from 'hono';
 import { trpcServer } from '@hono/trpc-server';
 import { drizzle } from 'drizzle-orm/bun-sqlite';
 import { Database } from 'bun:sqlite';
-import { pages, sections, qdpiMoves, pageNotes } from '../../../packages/db/src/schema';
+import { pages, sections, qdpiMoves, pageNotes, vaultEntries } from '../../../packages/db/src/schema';
 import { symbolMetadata } from '../../../the-corpus/symbols/metadata';
 import { eq, and, like } from 'drizzle-orm';
 import { z } from 'zod';
@@ -24,16 +23,10 @@ import {
 } from '../../../packages/utils/glyphCodec';
 import { join } from 'path';
 import { readdirSync } from 'fs';
+import { t, AppContext } from './trpc';
+import { requireRole } from './middleware/requireRole';
 
 export const db = drizzle(new Database('db.sqlite'));
-
-export type AppContext = Context & { user: unknown };
-const t = initTRPC.context<AppContext>().create();
-
-// TODO: Define mutations for actions like 'Merge' that may be restricted to,
-// or overseen by, Role.MythicGuardian.
-// Example: A mergeArtifacts mutation would check:
-// if (ctx.user?.role !== Role.MythicGuardian) { throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Only Mythic Guardians can perform merges.' }); }
 
 const pageSelect = {
   id: pages.id,
@@ -55,10 +48,9 @@ export const appRouter = t.router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      // TODO: Implement Role-based access control.
-      // If user is Role.Guest, this action might be disallowed or require approval.
-      // const userRole = ctx.user?.role; // Example: assuming role is on user context
-      // if (userRole === Role.Guest) { throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Guests cannot save notes without approval.' }); }
+      // TODO: Implement Role-based access control (e.g., Role.Guest restrictions).
+      // const userRole = ctx.user?.role;
+      // if (userRole === Role.Guest) { throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Guests cannot save notes.' }); }
 
       // 1. Save the note
       const noteResult = await db.insert(pageNotes).values({
@@ -92,7 +84,7 @@ export const appRouter = t.router({
         polarity: glyphData.polarity,
         rotation: glyphData.rotation,
         modality: glyphData.modality,
-        userId: input.userId, // Use the userId from the input
+        userId: input.userId,
         operationDetails: `Saved note on pageId: ${input.pageId}, noteId: ${newNoteId}`,
       });
 
@@ -140,15 +132,44 @@ export const appRouter = t.router({
         modality: modality,
         userId: input.userId,
         operationDetails: input.operationDetails,
-      }).returning({ insertedId: qdpiMoves.id }); // Correct way to get last inserted ID with Drizzle
+      }).returning({ insertedId: qdpiMoves.id });
 
       return { success: true, moveId: result[0].insertedId };
     }),
 
-  getPageById: t.procedure
+  // The classic Vault logDream endpoint, for backward compatibility and for UI logging.
+  logDream: t.procedure
     .input(
-      z.object({ section: z.number(), index: z.number() })
+      z.object({
+        action: z.string(),
+        context: z.string(),
+        state: z.string(),
+        role: z.string(),
+        relation: z.string(),
+        polarity: z.string(),
+        rotation: z.string(),
+        content: z.string(),
+        actorId: z.string(),
+      })
     )
+    .mutation(async ({ input }) => {
+      await db.insert(vaultEntries).values({
+        action: input.action,
+        context: input.context,
+        state: input.state,
+        role: input.role,
+        relation: input.relation,
+        polarity: input.polarity,
+        rotation: input.rotation,
+        content: input.content,
+        actorId: input.actorId,
+        createdAt: Date.now(),
+      });
+      return { success: true };
+    }),
+
+  getPageById: t.procedure
+    .input(z.object({ section: z.number(), index: z.number() }))
     .query(async ({ input }) => {
       const result = await db
         .select(pageSelect)
@@ -219,6 +240,14 @@ export const appRouter = t.router({
   getCorpusMetadata: t.procedure.query(async () => {
     return { colors: colorMap };
   }),
+
+  mergeEntries: t.procedure
+    .use(requireRole(['MythicGuardian']))
+    .input(z.object({ sourceId: z.number(), targetId: z.number() }))
+    .mutation(async () => {
+      // placeholder merge logic; see permissionsMap in packages/types
+      return { success: true };
+    }),
 });
 
 export type AppRouter = typeof appRouter;
@@ -226,6 +255,5 @@ export type AppRouter = typeof appRouter;
 export const app = new Hono<AppContext>();
 
 app.use('/trpc/*', authMiddleware);
-// TODO: Fix this type error, it's a known issue with Hono and tRPC
-// @ts-expect-error Hono type inference issue
+// @ts-expect-error Hono type inference issue (documented upstream)
 app.use('/trpc/*', trpcServer({ router: appRouter }));

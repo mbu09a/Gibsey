@@ -167,6 +167,13 @@ newer), and **Python 3** installed.
 
 ## Running Tests
 
-Run the TypeScript unit tests with `bun test`. Python tests are executed with `pytest`.
+Install JavaScript dev dependencies with `bun install` to ensure packages like `@playwright/test`, `hono`, and `drizzle-orm` are available. Install Python tooling with `pip install pytest`.
+
+Run the TypeScript unit tests with `bun test`. Python tests are executed with `pytest`. End-to-end tests use Playwright and can be run with `bun x playwright test` (or `bunx playwright test` if you have the `bunx` helper installed).
 
 ---
+
+## Roles and Permissions
+
+See [docs/role-permissions.md](docs/role-permissions.md) for allowed actions of Guests, Scribes, Contributors, and Guardians.
+

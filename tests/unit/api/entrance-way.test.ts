@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import * as bunTest from 'bun:test';
 
 // Bun's vi helper lacks `mock`, so map it when missing
@@ -13,21 +13,38 @@ vi.mock('drizzle-orm/bun-sqlite', () => ({ drizzle: () => ({}) }));
 vi.mock('bun:sqlite', () => ({ Database: class {} }));
 vi.mock('drizzle-orm/sqlite-core', () => ({
   sqliteTable: () => ({}),
-  integer: () => ({ primaryKey: () => ({}) }),
+  integer: () => ({
+    primaryKey: () => ({}),
+    references: () => ({ notNull: () => ({}) }),
+    notNull: () => ({ unique: () => ({}) }),
+    unique: () => ({})
+  }),
   text: () => ({ notNull: () => ({}) })
 }));
-vi.mock('../../../packages/db/src/schema', () => ({ pages: {}, sections: {} }));
+// Unified schema mocks (covering all possible import paths)
+vi.mock('../../../packages/db/src/schema', () => ({ pages: {}, sections: {}, vaultEntries: {} }));
+vi.mock('/workspace/gibsey/packages/db/src/schema', () => ({ pages: {}, sections: {}, vaultEntries: {} }));
+vi.mock('../../../packages/db/src/schema.ts', () => ({ pages: {}, sections: {}, vaultEntries: {} }));
+vi.mock('/workspace/gibsey/packages/db/src/schema.ts', () => ({ pages: {}, sections: {}, vaultEntries: {} }));
+
 vi.mock('@trpc/server', () => ({ initTRPC: () => ({ context: () => ({ create: () => ({ router: (obj: any) => obj }) }) }) }));
-vi.mock('drizzle-orm', () => ({ eq: () => ({}), and: () => ({}), like: () => ({}) }));
+vi.mock('drizzle-orm', () => ({
+  eq: () => ({}),
+  and: () => ({}),
+  like: () => ({}),
+  relations: () => ({})
+}));
 vi.mock('../../../apps/api/auth/middleware', () => ({ authMiddleware: () => {} }));
 
 // Mock BOTH possible symbol and schema imports for router dependencies
 vi.mock('../../../the-corpus/symbols/metadata', () => ({
   symbolMetadata: [{ character: 'Test', filename: 'a.svg', color: '#fff', orientation: 'upright' }],
 }));
-vi.mock('../../../packages/db/src/schema.ts', () => ({ pages: {}, sections: {} }));
 
-import * as router from '../../../apps/api/src/router';
+let router: typeof import('../../../apps/api/src/router');
+beforeAll(async () => {
+  router = await import('../../../apps/api/src/router');
+});
 
 const mockDb = {
   select: vi.fn().mockReturnThis(),

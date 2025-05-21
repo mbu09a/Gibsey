@@ -10,7 +10,9 @@
     "test:all": "bun run test && bun run pytest && bun run playwright:test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.42.1",
     "drizzle-kit": "^0.31.1",
-    "drizzle-orm": "^0.43.1"
+    "drizzle-orm": "^0.43.1",
+    "hono": "^3.11.0"
   }
 }

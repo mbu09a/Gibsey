@@ -29,11 +29,30 @@ def post_fake_comment(page_id: int, text: str):
     logging.info("Posting fake comment to page %s: %s", page_id, text)
 
 
+def log_dream(content: str, actor_id: str = "test_agent"):
+    """Log a dream move via the tRPC API."""
+    payload = {
+        "input": {
+            "action": "Dream",
+            "context": "test",
+            "state": "awake",
+            "role": "tester",
+            "relation": "self",
+            "polarity": "neutral",
+            "rotation": "N",
+            "content": content,
+            "actorId": actor_id,
+        }
+    }
+    requests.post(f"{API_BASE}/trpc/logDream", json=payload, timeout=5)
+
+
 def main():
     page = fetch_page(1, 1)
     if page:
         logging.info("Page text: %s", page.get('text'))
         post_fake_comment(page.get('id', 0), "Test comment from test_agent")
+        log_dream(page.get('text', ''), "test_agent")
     else:
         logging.warning("Page not found")
 
