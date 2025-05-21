@@ -1,5 +1,5 @@
 import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
-import { relations } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
 export const sections = sqliteTable('sections', {
   id: integer('id').primaryKey(),
@@ -35,18 +35,8 @@ export const sectionRelations = relations(sections, ({ many }) => ({
   pages: many(pages),
 }));
 
-export const pageRelations = relations(pages, ({ one }) => ({
-  section: one(sections, {
-    fields: [pages.section],
-    references: [sections.id],
-  }),
-}));
-export const vaultEntries = sqliteTable('vault_entries', {
-  id: integer('id').primaryKey(),
-  messageId: text('message_id').notNull().unique(),
-  context: text('context').notNull(),
-  fromWorld: text('from_world').notNull(),
-  toWorld: text('to_world').notNull(),
-  payload: text('payload').notNull(),
-  orientation: text('orientation').notNull(),
-});
+export const qdpiMoves = sqliteTable('qdpi_moves', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  timestamp: integer('timestamp', { mode: 'timestamp_ms' }).notNull().default(sql`(strftime('%s', 'now') * 1000)`),
+  numericGlyph: integer('numeric_glyph').notNull(),
+  action: integer('action').notNull(),

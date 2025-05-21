@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { trpc } from './trpc';
+import {
+  Action,
+  Context as GlyphContext,
+  State,
+  Role,
+  Relation,
+  Polarity,
+  Rotation,
+  Modality,
+  Glyph,
+} from '../../../packages/utils/glyphCodec';
 import Navigation from './components/Navigation';
 import PageDisplay from './components/PageDisplay';
 import SearchJump from './components/SearchJump';
@@ -18,11 +29,39 @@ const App: React.FC = () => {
     setModality(modality);
   }, [modality]);
 
+  // QDPI logging mutation for every navigation event
+  const logMoveMutation = trpc.logQdpiMove.useMutation();
+
   const { data: sections } = trpc.getSections.useQuery();
   const page = trpc.getPageById.useQuery(
     { section, index },
     { context: { modality } },
   );
+
+  // Log every navigation (Read action) to QDPI
+  useEffect(() => {
+    if (page.data) {
+      // Ensure modality enum maps from string safely
+      const currentModalityString = modality.charAt(0).toUpperCase() + modality.slice(1);
+      const glyphModality: Modality = (Modality as any)[currentModalityString] ?? Modality.Text;
+
+      const glyphData: Glyph = {
+        action: Action.Read,
+        context: GlyphContext.Page,
+        state: State.Public,
+        role: Role.Human,
+        relation: Relation.S2O,
+        polarity: Polarity.External,
+        rotation: Rotation.N,
+        modality: glyphModality,
+      };
+      logMoveMutation.mutate({
+        ...glyphData,
+        operationDetails: `Navigated to section ${section}, page ${index}`,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page.data, section, index, modality]);
 
   // Temporary user data until auth is implemented
   const user = { name: 'Guest', role: 'guest' as const };
@@ -39,7 +78,7 @@ const App: React.FC = () => {
     setIndex(idx);
   };
 
-  // Dream logging mutation (stub—replace with real Vault logging endpoint if available)
+  // Dream logging mutation (Vault logging)
   const logDream = trpc.logDream?.useMutation?.({
     onSuccess: () => {
       setDreamToast(true);
@@ -69,6 +108,7 @@ const App: React.FC = () => {
         modality={modality}
         onModalityChange={handleModalityChange}
         color={currentColor}
+        currentPageId={page.data?.id}
       />
       <SearchJump onSelect={handleNavigate} color={currentColor} />
       <div className="flex gap-4">
@@ -113,3 +153,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

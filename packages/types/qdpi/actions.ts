@@ -1,14 +1,14 @@
 export enum Action {
   Read,
   Index,
+  Link,
   Prompt,
   React,
   Write,
   Save,
+  Merge,
   Forget,
-  Dream,
-  Link,
-  Merge
+  Dream
 }
 
 export function encodeAction(a: Action): number {
