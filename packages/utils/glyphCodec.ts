@@ -107,7 +107,7 @@ export function decodeGlyphString(code: string): Glyph {
   };
 }
 
-// Efficient numeric encoding (up to 24,576 unique values for 8x4x4x4x2x2x4x6)
+// Efficient numeric encoding (up to 92,160 unique values for 10x4x4x6x2x2x4x6)
 export function encodeGlyphNumeric(g: Glyph): number {
   const m = g.modality ?? Modality.Text;
   return (

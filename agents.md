@@ -211,6 +211,109 @@ tests expect this path during setup.
 
 ---
 
+## QDPI System API
+This section details the tRPC procedures available for interacting with the QDPI (Quantum Descriptive Phenomenological Inquiry) event logging system.
+
+### `logQdpiMove`
+Logs a QDPI (Quantum Descriptive Phenomenological Inquiry) event to the system. This is the primary way to record any significant action, state change, or interaction within the Gibsey Engine, using the full 8-axis QDPI grammar.
+
+**Input Parameters:**
+The procedure expects an object with the following fields (enums are from `packages/utils/glyphCodec.ts`):
+- `action: Action` (e.g., `Action.Read`, `Action.Write`)
+- `context: GlyphContext` (e.g., `GlyphContext.Page`, `GlyphContext.Reaction`)
+- `state: State` (e.g., `State.Public`, `State.Private`)
+- `role: Role` (e.g., `Role.Human`, `Role.Guest` - from the 6 core roles)
+- `relation: Relation` (e.g., `Relation.S2O`, `Relation.O2S`)
+- `polarity: Polarity` (e.g., `Polarity.Internal`, `Polarity.External`)
+- `rotation: Rotation` (e.g., `Rotation.N`, `Rotation.E`)
+- `modality?: Modality` (optional, defaults to `Modality.Text`; e.g., `Modality.Audio`)
+- `userId?: string` (optional, identifier for the user performing the action)
+- `operationDetails?: string` (optional, human-readable string or JSON string for any additional context or specific identifiers related to the move, e.g., page ID, note ID).
+
+**Recommended Usage:**
+It is highly recommended to use the event creation helper functions from `packages/qdpi/index.ts` (e.g., `createReadEventInput(...)`, `createWriteEventInput(...)`) to construct the input for `logQdpiMove`. These helpers provide sensible defaults for common actions.
+
+**Permissions:**
+This endpoint enforces action-level permissions. Based on the user's role (from `ctx.user.role`) and the specific `action` being logged, the system checks against defined capabilities in `packages/types/roleCapabilities.ts` and `packages/types/actionPermissions.ts`. Unauthorized actions will result in a 'FORBIDDEN' error.
+
+**Example (TypeScript, using a helper):**
+```typescript
+// Assuming a tRPC client setup, e.g., from apps/web/src/trpc.ts
+// import { trpc } from './trpcClient'; 
+import { Role, GlyphContext, Modality } from 'packages/utils/glyphCodec'; // Adjust path as per your import structure
+import { createPromptEventInput } from 'packages/qdpi'; // Adjust path
+
+async function logUserPrompt(userRole: Role, promptText: string, pageId: string, userId?: string) {
+  const qdpiInput = createPromptEventInput(
+    userRole,
+    GlyphContext.Page, // Assuming prompt is related to a page
+    {
+      userId: userId,
+      operationDetails: JSON.stringify({ pageId, prompt: promptText }),
+      modality: Modality.Text // Explicitly setting modality
+    }
+  );
+  try {
+    // const result = await trpc.logQdpiMove.mutate(qdpiInput); // Example client-side call
+    // console.log('QDPI Move Logged, ID:', result.moveId);
+    // On the server-side, you'd call the procedure directly if within another procedure
+  } catch (error) {
+    // console.error('Failed to log QDPI move:', error);
+  }
+}
+```
+
+### Querying QDPI Moves
+The following tRPC procedures are available for querying logged QDPI events from the `qdpi_moves` table. Returned `QdpiMove` objects include all stored fields: `id`, `timestamp`, `numericGlyph`, `action`, `context`, `state`, `role`, `relation`, `polarity`, `rotation`, `modality`, `userId`, and `operationDetails`.
+
+#### `getQdpiMoveById`
+Retrieves a single QDPI move by its unique database ID.
+- **Parameters:** `{ id: number }`
+- **Result:** `QdpiMove | null`
+
+#### `getQdpiMovesByNumericGlyph`
+Retrieves all QDPI moves that share the same `numericGlyph` value, ordered by timestamp descending.
+- **Parameters:** `{ numericGlyph: number }`
+- **Result:** `QdpiMove[]`
+
+#### `getQdpiMoves`
+Retrieves a list of QDPI moves based on a flexible set of filters, with pagination and ordering by timestamp descending.
+- **Parameters:** An object with:
+    - `filter?: { action?: Action, context?: GlyphContext, state?: State, role?: Role, relation?: Relation, polarity?: Polarity, rotation?: Rotation, modality?: Modality, userId?: string, startDate?: number, endDate?: number }` (all filter fields are optional; `startDate` and `endDate` are Unix timestamps in milliseconds).
+    - `limit?: number` (defaults to 50)
+    - `offset?: number` (defaults to 0)
+- **Result:** `QdpiMove[]`
+
+**Example (TypeScript, using `getQdpiMoves`):**
+```typescript
+// Assuming a tRPC client setup
+// import { trpc } from './trpcClient';
+import { Action, Role } from 'packages/utils/glyphCodec'; // Adjust path
+
+async function fetchRecentGuestReactions(userIdForFilter?: string) {
+  try {
+    const twentyFourHoursAgo = Date.now() - (24 * 60 * 60 * 1000);
+    // const moves = await trpc.getQdpiMoves.query({ // Example client-side call
+    //   filter: {
+    //     role: Role.Guest,
+    //     action: Action.React,
+    //     userId: userIdForFilter, // Can be undefined
+    //     startDate: twentyFourHoursAgo
+    //   },
+    //   limit: 20
+    // });
+    // console.log('Recent Guest reactions:', moves);
+    // moves.forEach(move => {
+    //   console.log(`Action: ${Action[move.action]}, Details: ${move.operationDetails}`);
+    // });
+  } catch (error) {
+    // console.error('Failed to fetch QDPI moves:', error);
+  }
+}
+```
+
+---
+
 ## Need Help?  
 - Check `/README.md`, `/docs/`, and [`docs/role-permissions.md`](docs/role-permissions.md)
 - For environment or deployment issues, see `coolify.yml` and Docker configs.
