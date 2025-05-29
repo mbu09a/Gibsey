@@ -75,7 +75,7 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
                 noteRelatedToPageId: currentPageId,
                 newNoteId: data.newNoteId,
               }),
-              userId: 'temp-user-id', // Placeholder user ID
+              userId: undefined, // Will be set by server from auth context
             }
           );
           logQdpiMoveMutation.mutate(qdpiInput, {
@@ -179,7 +179,7 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
                 'Prompt',
                 () => createPromptEventInput(currentRole, GlyphContext.Page, {
                   operationDetails: JSON.stringify({ promptedOnPageId: currentPageId }),
-                  userId: 'temp-user-id',
+                  userId: undefined,
                 })
               )}
               className="border px-2 py-1" style={{ borderColor: color }}
@@ -190,8 +190,8 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
               onClick={() => handleGenericQdpiAction(
                 'Link',
                 () => createLinkEventInput(currentRole, GlyphContext.Page, {
-                  operationDetails: JSON.stringify({ linkFromPageId: currentPageId, linkToPageId: 'PLACEHOLDER_TARGET_ID' }),
-                  userId: 'temp-user-id',
+                  operationDetails: JSON.stringify({ linkFromPageId: currentPageId, linkToPageId: currentPageId }),
+                  userId: undefined,
                 })
               )}
               className="border px-2 py-1" style={{ borderColor: color }}
@@ -203,7 +203,7 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
                 'Merge',
                 () => createMergeEventInput(currentRole, GlyphContext.Page, {
                   operationDetails: JSON.stringify({ mergeOnPageId: currentPageId }),
-                  userId: 'temp-user-id',
+                  userId: undefined,
                 })
               )}
               className="border px-2 py-1" style={{ borderColor: color }}
@@ -215,7 +215,7 @@ const PageDisplay: React.FC<PageDisplayProps> = ({
                 'Dream',
                 () => createDreamEventInput(currentRole, GlyphContext.Page, {
                   operationDetails: JSON.stringify({ dreamOnPageId: currentPageId }),
-                  userId: 'temp-user-id',
+                  userId: undefined,
                 })
               )}
               className="border px-2 py-1" style={{ borderColor: color }}

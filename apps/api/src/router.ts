@@ -41,7 +41,50 @@ const pageSelect = {
   text: pages.text,
 };
 
+import { createUser, authenticateUser, generateToken } from './auth/authService';
+
 export const appRouter = t.router({
+  // Auth procedures
+  register: t.procedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: z.string().min(8),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const user = await createUser(input.email, input.password);
+      const token = generateToken({ userId: user.id, email: user.email });
+      
+      return {
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+        token,
+      };
+    }),
+
+  login: t.procedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const user = await authenticateUser(input.email, input.password);
+      const token = generateToken({ userId: user.id, email: user.email });
+      
+      return {
+        user: {
+          id: user.id,
+          email: user.email,
+        },
+        token,
+      };
+    }),
+
   savePageNote: t.procedure
     .input(
       z.object({
@@ -51,15 +94,21 @@ export const appRouter = t.router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      // TODO: Implement Role-based access control (e.g., Role.Guest restrictions).
-      // const userRole = ctx.user?.role;
-      // if (userRole === Role.Guest) { throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Guests cannot save notes.' }); }
+      // Check if user is authenticated
+      const userId = ctx.user?.id || input.userId || 'anon';
+      
+      if (userId === 'anon' || ctx.user?.role === Role.Guest) {
+        throw new TRPCError({ 
+          code: 'UNAUTHORIZED', 
+          message: 'Guests cannot save notes. Please login first.' 
+        });
+      }
 
       // 1. Save the note
       const noteResult = await db.insert(pageNotes).values({
         pageId: input.pageId,
         noteText: input.noteText,
-        userId: input.userId,
+        userId: userId,
       }).returning({ insertedId: pageNotes.id });
 
       const newNoteId = noteResult[0].insertedId;
@@ -739,7 +788,7 @@ export const appRouter = t.router({
       }
       
       // 3. Call DreamRIA Service
-      const DREAMRIA_SERVICE_URL = 'http://localhost:12345/generate'; // Placeholder URL
+      const DREAMRIA_SERVICE_URL = process.env.DREAMRIA_SERVICE_URL || 'http://localhost:12345/generate';
       const DREAMRIA_ACTOR_ID = 'dreamria-agent'; // Confirming actor ID
       let dreamRIAContent: string;
 

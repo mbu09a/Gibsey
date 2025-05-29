@@ -1,6 +1,52 @@
 # Gibsey
 
-Gibsey is both a literary operating system and a living, recursive narrative. It’s a hybrid of novel, game, AI, and myth-engine—a platform where primary texts, AI agents, and readers co-create meaning in real time.
+Gibsey is both a literary operating system and a living, recursive narrative.
+
+## Quick Start
+
+### Prerequisites
+- Node.js v18+ or Bun
+- SQLite
+- Supabase CLI (for local development)
+
+### Setup
+
+1. Clone the repository:
+```bash
+git clone <repo-url>
+cd gibsey-repo
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or
+bun install
+```
+
+3. Set up environment variables:
+```bash
+cp .env.example .env
+# Edit .env with your configuration
+```
+
+4. Run database migrations:
+```bash
+npm run db:migrate
+```
+
+5. Start the development server:
+```bash
+npm run dev
+```
+
+### Authentication
+
+The system now includes JWT-based authentication:
+
+- Register: POST `/trpc/register` with email/password
+- Login: POST `/trpc/login` with email/password
+- Protected routes require `Authorization: Bearer <token>` header It’s a hybrid of novel, game, AI, and myth-engine—a platform where primary texts, AI agents, and readers co-create meaning in real time.
 
 At heart, Gibsey is the vessel and engine: it delivers narrative as interface, lets stories and symbols move between human and AI minds, and is built to be as much a world as a tool. It is not just an app; it is a generative mythos, a canon-in-the-making, and a test bed for agentic AI.
 

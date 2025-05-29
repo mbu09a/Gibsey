@@ -6,6 +6,7 @@ import { httpBatchLink } from '@trpc/client';
 import { getModality } from './utils/modalityStore';
 import './index.css';
 import App from './App';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const client = trpc.createClient({
   links: [
@@ -21,9 +22,11 @@ const client = trpc.createClient({
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <trpc.Provider client={client} queryClient={queryClient}>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </trpc.Provider>
+  <ErrorBoundary>
+    <trpc.Provider client={client} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </trpc.Provider>
+  </ErrorBoundary>
 );

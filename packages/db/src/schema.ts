@@ -1,5 +1,12 @@
-import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, integer, text, unique } from 'drizzle-orm/sqlite-core';
 import { relations, sql } from 'drizzle-orm';
+
+export const users = sqliteTable('users', {
+  id: text('id').primaryKey().$defaultFn(() => crypto.randomUUID()),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
+});
 
 export const sections = sqliteTable('sections', {
   id: integer('id').primaryKey(),
@@ -17,6 +24,14 @@ export const pages = sqliteTable('pages', {
   text: text('text').notNull(),
 });
 
+export const pageNotes = sqliteTable('page_notes', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  pageId: integer('page_id').notNull().references(() => pages.id),
+  userId: text('user_id').notNull().references(() => users.id),
+  noteText: text('note_text').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(strftime('%s', 'now'))`),
+});
+
 export const vaultEntries = sqliteTable('vault_entries', {
   id: integer('id').primaryKey(),
   action: text('action').notNull(),
@@ -27,7 +42,7 @@ export const vaultEntries = sqliteTable('vault_entries', {
   polarity: text('polarity').notNull(),
   rotation: text('rotation').notNull(),
   content: text('content').notNull(),
-  actorId: text('actor_id').notNull(),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
   is_forgotten: integer('is_forgotten', { mode: 'boolean' }).notNull().default(false),
 });
@@ -41,6 +56,15 @@ export const qdpiMoves = sqliteTable('qdpi_moves', {
   timestamp: integer('timestamp', { mode: 'timestamp_ms' }).notNull().default(sql`(strftime('%s', 'now') * 1000)`),
   numericGlyph: integer('numeric_glyph').notNull(),
   action: integer('action').notNull(),
+  context: integer('context').notNull(),
+  state: integer('state').notNull(),
+  role: integer('role').notNull(),
+  relation: integer('relation').notNull(),
+  polarity: integer('polarity').notNull(),
+  rotation: integer('rotation').notNull(),
+  modality: integer('modality').notNull(),
+  userId: text('user_id').references(() => users.id),
+  operationDetails: text('operation_details'),
 });
 
 export const pageLinks = sqliteTable('page_links', {
@@ -61,6 +85,10 @@ export const qdpiMoveRelations = relations(qdpiMoves, ({ one }) => ({
     fields: [qdpiMoves.id],
     references: [pageLinks.qdpi_move_id],
   }),
+  user: one(users, {
+    fields: [qdpiMoves.userId],
+    references: [users.id],
+  }),
 }));
 
 export const pageLinkRelations = relations(pageLinks, ({ one }) => ({
@@ -77,5 +105,28 @@ export const pageLinkRelations = relations(pageLinks, ({ one }) => ({
   qdpiMove: one(qdpiMoves, {
     fields: [pageLinks.qdpi_move_id],
     references: [qdpiMoves.id],
+  }),
+}));
+
+export const userRelations = relations(users, ({ many }) => ({
+  vaultEntries: many(vaultEntries),
+  pageNotes: many(pageNotes),
+}));
+
+export const vaultEntryRelations = relations(vaultEntries, ({ one }) => ({
+  user: one(users, {
+    fields: [vaultEntries.userId],
+    references: [users.id],
+  }),
+}));
+
+export const pageNoteRelations = relations(pageNotes, ({ one }) => ({
+  page: one(pages, {
+    fields: [pageNotes.pageId],
+    references: [pages.id],
+  }),
+  user: one(users, {
+    fields: [pageNotes.userId],
+    references: [users.id],
   }),
 }));

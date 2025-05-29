@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "seed": "bun run packages/db/seed/index.ts",
-    "test": "bun test",
+    "test": "vitest",
     "test:e2e": "bunx playwright test",
     "playwright:test": "bun x playwright test",
     "pytest": "pytest",
@@ -11,8 +11,15 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.42.1",
+    "@vitest/ui": "^3.1.4",
     "drizzle-kit": "^0.31.1",
     "drizzle-orm": "^0.43.1",
-    "hono": "^3.11.0"
+    "hono": "^4.6.5",
+    "vitest": "^3.1.4"
+  },
+  "dependencies": {
+    "@types/jsonwebtoken": "^9.0.9",
+    "argon2": "^0.43.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }
